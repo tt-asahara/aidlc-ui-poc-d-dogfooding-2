@@ -1,0 +1,41 @@
+{
+  "stage": "functional-design",
+  "unit": "u1-walking-skeleton",
+  "upstream_ids": [
+    "AC1.1.1", "AC1.1.2", "AC1.1.3", "AC1.1.4", "AC1.1.5", "AC1.1.6",
+    "AC3.1.1", "AC3.1.2", "AC3.1.3", "AC3.1.4", "AC3.1.5", "AC3.1.6",
+    "AC5.1.1", "AC5.1.2", "AC5.1.3", "AC5.1.4", "AC5.1.5",
+    "AC7.2.1",
+    "AC7.3.1", "AC7.3.2", "AC7.3.3", "AC7.3.4"
+  ],
+  "coverage": [
+    { "id": "AC1.1.1", "status": "OK", "target": "BR1.1, BR1.2, BR1.4, BR1.5, BR1.6, BR4.1, BR4.5" },
+    { "id": "AC1.1.2", "status": "OK", "target": "BR1.3" },
+    { "id": "AC1.1.3", "status": "OK", "target": "BR1.3" },
+    { "id": "AC1.1.4", "status": "Deferred", "target": "u2-entry-and-ledger (二重送信の防止)" },
+    { "id": "AC1.1.5", "status": "Deferred", "target": "u2-entry-and-ledger (明細の一覧での表示。メモを文字として扱う規則は BR1.4)" },
+    { "id": "AC1.1.6", "status": "Deferred", "target": "u2-entry-and-ledger (明細の一覧)" },
+    { "id": "AC3.1.1", "status": "OK", "target": "BR2.3, BR2.6" },
+    { "id": "AC3.1.2", "status": "OK", "target": "BR2.4" },
+    { "id": "AC3.1.3", "status": "OK", "target": "BR2.2" },
+    { "id": "AC3.1.4", "status": "OK", "target": "BR2.1" },
+    { "id": "AC3.1.5", "status": "OK", "target": "BR2.5" },
+    { "id": "AC3.1.6", "status": "OK", "target": "BR2.3, BR2.6" },
+    { "id": "AC5.1.1", "status": "OK", "target": "BR3.1, BR3.4" },
+    { "id": "AC5.1.2", "status": "OK", "target": "BR3.2" },
+    { "id": "AC5.1.3", "status": "Deferred", "target": "u4-csv-import (出力 → 取り込みの往復。出力側の囲みは BR3.3)" },
+    { "id": "AC5.1.4", "status": "OK", "target": "BR3.5" },
+    { "id": "AC5.1.5", "status": "OK", "target": "BR3.6" },
+    { "id": "AC7.2.1", "status": "OK", "target": "BR4.1, BR4.2 (明細の部分。予算の部分は u3-budget で確かめる)" },
+    { "id": "AC7.3.1", "status": "OK", "target": "BR4.3" },
+    { "id": "AC7.3.2", "status": "Deferred", "target": "u3-budget, u4-csv-import (予算保存と取り込みの失敗表示)" },
+    { "id": "AC7.3.3", "status": "Deferred", "target": "u5-storage-resilience (全体のお知らせ枠と保存系の操作の停止。U1 は登録・集計・CSV 保存の停止と理由: BR4.2, BR4.6)" },
+    { "id": "AC7.3.4", "status": "Deferred", "target": "u5-storage-resilience (壊れた保存データを残すことの確認)" }
+  ],
+  "reverse": [
+    { "id": "BR2.7", "status": "N/A", "target": "U1 の予算の差し込み口による「未設定」表示。受け入れ条件 AC3.2.3 は U3 で確かめる" },
+    { "id": "BR3.3", "status": "N/A", "target": "AC5.1.3 の出力側。往復の確認は U4 で行う" },
+    { "id": "BR4.4", "status": "N/A", "target": "契約設計 Q3 の通し番号の照合。別タブの受け入れ条件 AC7.4.1・AC7.4.2 は U5 で確かめる" },
+    { "id": "BR4.6", "status": "N/A", "target": "AC7.3.3 の U1 分（読めないときの集計と CSV の表示）。AC7.3.3 全体は U5 で確かめる" }
+  ]
+}

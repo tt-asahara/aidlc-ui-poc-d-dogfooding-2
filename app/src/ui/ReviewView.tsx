@@ -1,11 +1,15 @@
 import { useMemo } from 'react';
 import { formatMonthLabel, formatYen } from '../domain/format';
+import type { Ledger } from '../domain/ledger';
 import { nextMonth, previousMonth } from '../domain/month';
 import type { MonthlySummary } from '../domain/monthlySummary';
 import type { StoreStatus } from '../domain/types';
+import { LedgerList } from './LedgerList';
 
 export interface ReviewViewProps {
   readonly summary: Pick<MonthlySummary, 'summarize'>;
+  /** 明細の一覧の取り出し（U2 W5、BR3.1）。AppShell が services.ledger を渡す。 */
+  readonly ledger: Pick<Ledger, 'listByMonth'>;
   /** 表示中の月（YYYY-MM）。 */
   readonly month: string;
   readonly storeStatus: StoreStatus;
@@ -14,9 +18,13 @@ export interface ReviewViewProps {
   readonly onSelectMonth: (month: string) => void;
 }
 
-/** 「2 確認」: 月の切り替えと月次集計（W5、BR2.x、BR4.6）。計算は MonthlySummary に任せる。 */
+/**
+ * 「2 確認」: 月の切り替えと月次集計（U1 W5、BR2.x、BR4.6）と、明細の一覧（U2 W5、BR3.1〜BR3.5）。
+ * 計算は MonthlySummary に、明細の取り出しは Ledger に任せる。
+ */
 export function ReviewView({
   summary,
+  ledger,
   month,
   storeStatus,
   dataVersion,
@@ -29,6 +37,11 @@ export function ReviewView({
     void dataVersion;
     return unreadable ? null : summary.summarize(month);
   }, [summary, month, unreadable, dataVersion]);
+  // 一覧も、集計と同じ合図（保存の知らせと表示月の変化）で、表示中の月の明細だけを読み直す（U2 NFR1.1、NFR1.2）。
+  const entries = useMemo(() => {
+    void dataVersion;
+    return unreadable ? [] : ledger.listByMonth(month);
+  }, [ledger, month, unreadable, dataVersion]);
 
   return (
     <section className="step" aria-labelledby="summary-heading" data-testid="review-section">
@@ -118,9 +131,10 @@ export function ReviewView({
               ))}
             </tbody>
           </table>
-          {/* 明細の一覧の置き場所（U2）、予算の保存とコピーの置き場所（U3）。U1 では何も表示しない。 */}
+          {/* 予算の保存とコピーの置き場所（U3）。 */}
         </>
       )}
+      <LedgerList entries={entries} month={month} storeStatus={storeStatus} />
     </section>
   );
 }

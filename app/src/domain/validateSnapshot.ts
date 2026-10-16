@@ -1,4 +1,5 @@
 import { isCategoryOfKind, isEntryKind } from './categoryCatalog';
+import { isRealDate, isWithinGraphemes } from './textRules';
 import { SCHEMA_VERSION, type StoreSnapshot } from './types';
 
 /**
@@ -14,7 +15,6 @@ const AMOUNT_MIN = 1;
 const AMOUNT_MAX = 9_999_999;
 const BUDGET_MIN = 0;
 const MEMO_MAX_GRAPHEMES = 100;
-const DATE_PATTERN = /^(\d{4})-(\d{2})-(\d{2})$/;
 const MONTH_PATTERN = /^\d{4}-(0[1-9]|1[0-2])$/;
 const LINE_BREAK = /[\r\n]/;
 
@@ -28,61 +28,22 @@ function isIntegerIn(value: unknown, min: number, max: number): value is number 
   return typeof value === 'number' && Number.isInteger(value) && value >= min && value <= max;
 }
 
-/** YYYY-MM-DD の形で、暦の上に実在する日付か（2026-02-30 などは偽）。 */
-function isRealDate(value: unknown): boolean {
-  if (typeof value !== 'string') {
-    return false;
-  }
-  const match = DATE_PATTERN.exec(value);
-  if (!match) {
-    return false;
-  }
-  const year = Number(match[1]);
-  const month = Number(match[2]);
-  const day = Number(match[3]);
-  const date = new Date(Date.UTC(year, month - 1, day));
-  date.setUTCFullYear(year);
-  return (
-    date.getUTCFullYear() === year && date.getUTCMonth() === month - 1 && date.getUTCDate() === day
-  );
-}
-
 /**
- * メモの文字数を、見える1文字（書記素）で数える。Intl.Segmenter は検査1回につき1つだけ作る。
- * memo.length（UTF-16 の数）が 100 以下なら、書記素の数も 100 以下なので Segmenter を使わない（NFR 設計レビュー R-01）。
+ * メモの規則。日付の実在と見える1文字の数え方は、Ledger.validate と同じ textRules の関数を使う（U2 NFR5.1）。
+ * memo.length（UTF-16 の数）が 100 以下なら Segmenter を使わない（NFR 設計レビュー R-01）。
  */
-function createMemoLengthCheck(): (memo: string) => boolean {
-  let segmenter: Intl.Segmenter | null = null;
-  return (memo) => {
-    if (memo.length <= MEMO_MAX_GRAPHEMES) {
-      return true;
-    }
-    segmenter ??= new Intl.Segmenter('ja', { granularity: 'grapheme' });
-    const segments = segmenter.segment(memo)[Symbol.iterator]();
-    let count = 0;
-    while (!segments.next().done) {
-      count += 1;
-      if (count > MEMO_MAX_GRAPHEMES) {
-        return false;
-      }
-    }
-    return true;
-  };
-}
-
-function isValidMemo(value: unknown, withinLength: (memo: string) => boolean): boolean {
+function isValidMemo(value: unknown): boolean {
   return (
     typeof value === 'string' &&
     value.trim() === value &&
     !LINE_BREAK.test(value) &&
-    withinLength(value)
+    isWithinGraphemes(value, MEMO_MAX_GRAPHEMES)
   );
 }
 
 interface EntryCheckState {
   readonly entryIds: Set<string>;
   readonly addedOrders: Set<number>;
-  readonly withinLength: (memo: string) => boolean;
 }
 
 /** 明細1件を確かめ、合わない項目の名前を返す（合えば null）。 */
@@ -109,7 +70,7 @@ function checkEntry(value: unknown, state: EntryCheckState): string | null {
   if (!isIntegerIn(amount, AMOUNT_MIN, AMOUNT_MAX)) {
     return 'amount';
   }
-  if (!isValidMemo(memo, state.withinLength)) {
+  if (!isValidMemo(memo)) {
     return 'memo';
   }
   if (!isIntegerIn(addedOrder, 1, Number.MAX_SAFE_INTEGER)) {
@@ -180,7 +141,6 @@ export function validateSnapshot(value: unknown): SnapshotValidation {
   const entryState: EntryCheckState = {
     entryIds: new Set(),
     addedOrders: new Set(),
-    withinLength: createMemoLengthCheck(),
   };
   for (let index = 0; index < entries.length; index += 1) {
     const field = checkEntry(entries[index], entryState);

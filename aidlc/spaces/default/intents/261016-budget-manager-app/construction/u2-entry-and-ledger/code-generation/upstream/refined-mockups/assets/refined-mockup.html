@@ -1,0 +1,266 @@
+<!doctype html>
+<!--
+  詳細モックアップ（案A: 縦積みのステップ順）。読み取り専用の見本で、保存・ファイル入出力は行わない。外部通信なし。データはすべて架空。
+  画面の状態は下部の切り替えバー、または ?state=<状態ID> で選ぶ。状態ID は ui-poc-refined-contract.md の対応表と一致する。
+-->
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>予算管理 — 詳細モックアップ</title>
+<style>
+  :root {
+    --ink: oklch(24% 0.02 220);
+    --ink-2: oklch(40% 0.02 220);
+    --paper: oklch(98.5% 0.006 85);
+    --paper-2: oklch(95.5% 0.008 85);
+    --line: oklch(80% 0.01 85);
+    --accent: oklch(42% 0.07 200);
+    --accent-soft: oklch(93% 0.025 200);
+    --warn: oklch(45% 0.12 40);
+    --warn-soft: oklch(94% 0.03 40);
+    --space-xs: 4px; --space-sm: 8px; --space-md: 16px; --space-lg: 24px; --space-xl: 48px;
+    --text-sm: 0.875rem; --text-base: 1rem; --text-lg: 1.25rem; --text-xl: 1.75rem;
+    --radius: 4px;
+    --ease-out: cubic-bezier(0.25, 1, 0.5, 1);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 400 var(--text-base)/1.6 system-ui, -apple-system, "Hiragino Sans", "Yu Gothic UI", sans-serif; }
+  .num { font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+  button, input, select { font: inherit; color: inherit; }
+  button { cursor: pointer; border: 1px solid var(--ink-2); background: var(--paper); padding: var(--space-sm) var(--space-md); border-radius: var(--radius); min-height: 44px; }
+  button.primary { background: var(--accent); color: var(--paper); border-color: var(--accent); }
+  button.link { border: 0; background: none; text-decoration: underline; text-underline-offset: 3px; padding: var(--space-sm); }
+  button:disabled { cursor: not-allowed; opacity: 0.55; }
+  :is(button, input, select, a, [tabindex]):focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  .skip { position: absolute; left: -999px; top: var(--space-sm); background: var(--paper); padding: var(--space-sm); z-index: 50; }
+  .skip:focus { left: var(--space-md); }
+  header.app { display: flex; align-items: baseline; gap: var(--space-lg); padding: var(--space-md) var(--space-lg); border-bottom: 1px solid var(--line); max-width: 860px; margin: 0 auto; }
+  header.app h1 { font-size: var(--text-lg); margin: 0; }
+  header.app p { margin: 0; font-size: var(--text-sm); color: var(--ink-2); }
+  main { max-width: 860px; margin: 0 auto; padding: 0 var(--space-lg) var(--space-xl); }
+  section.step { padding: var(--space-lg) 0; border-bottom: 1px solid var(--line); }
+  .step-label { font-size: var(--text-sm); color: var(--accent); font-weight: 700; letter-spacing: 0.05em; margin: 0 0 var(--space-xs); }
+  h2 { font-size: var(--text-lg); margin: 0 0 var(--space-md); }
+  h3 { font-size: var(--text-base); margin: var(--space-lg) 0 var(--space-sm); }
+  label, .label { display: block; font-size: var(--text-sm); font-weight: 600; margin-bottom: var(--space-xs); }
+  input, select { width: 100%; min-height: 44px; padding: var(--space-sm); border: 1px solid var(--ink-2); border-radius: var(--radius); background: var(--paper); }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 var(--space-md); }
+  .field { margin-bottom: var(--space-md); }
+  .hint { font-size: var(--text-sm); color: var(--ink-2); margin-top: var(--space-xs); }
+  .err { color: var(--warn); font-size: var(--text-sm); margin-top: var(--space-xs); font-weight: 600; }
+  .invalid input, input.invalid { border: 2px solid var(--warn); }
+  fieldset { border: 0; margin: 0 0 var(--space-md); padding: 0; }
+  legend { font-size: var(--text-sm); font-weight: 600; margin-bottom: var(--space-xs); padding: 0; }
+  .seg { display: inline-flex; border: 1px solid var(--ink-2); border-radius: var(--radius); overflow: hidden; }
+  .seg label { margin: 0; padding: var(--space-sm) var(--space-lg); font-weight: 400; font-size: var(--text-base); cursor: pointer; }
+  .seg input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .seg label:has(input:checked) { background: var(--accent-soft); font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
+  .seg label:has(input:focus-visible) { outline: 3px solid var(--accent); outline-offset: -3px; }
+  table { width: 100%; border-collapse: collapse; }
+  caption { text-align: left; font-size: var(--text-sm); color: var(--ink-2); padding-bottom: var(--space-xs); }
+  th, td { padding: var(--space-sm); border-bottom: 1px solid var(--line); text-align: left; vertical-align: middle; }
+  thead th { font-size: var(--text-sm); color: var(--ink-2); font-weight: 600; }
+  tbody th { font-weight: 400; }
+  td input.budget { width: 9em; text-align: right; font-variant-numeric: tabular-nums; }
+  .notice { padding: var(--space-md); border-radius: var(--radius); margin-bottom: var(--space-md); }
+  .notice strong { display: block; }
+  .notice.ok { background: var(--accent-soft); }
+  .notice.warn { background: var(--warn-soft); }
+  .notice ul { margin: var(--space-xs) 0 0; padding-left: 1.25em; }
+  .confirm { border: 2px solid var(--ink-2); border-radius: var(--radius); padding: var(--space-md); margin-top: var(--space-md); background: var(--paper-2); }
+  .confirm .actions { display: flex; gap: var(--space-sm); flex-wrap: wrap; margin-top: var(--space-md); }
+  .month-nav { display: flex; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-md); }
+  .month-nav strong { font-size: var(--text-lg); min-width: 8em; text-align: center; }
+  .totals { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-md); margin-bottom: var(--space-lg); }
+  .totals > div { border-top: 3px solid var(--line); padding-top: var(--space-sm); }
+  ::placeholder { color: var(--ink-2); opacity: 1; }
+  .totals .label { color: var(--ink-2); font-weight: 400; }
+  .totals .value { font-size: var(--text-xl); font-weight: 700; text-align: left; }
+  .over { color: var(--warn); font-weight: 700; }
+  .muted { color: var(--ink-2); }
+  .row-actions { display: flex; gap: var(--space-sm); align-items: center; flex-wrap: wrap; margin-top: var(--space-md); }
+  .banner { max-width: 860px; margin: var(--space-md) auto 0; padding: 0 var(--space-lg); }
+  .proto-bar { position: fixed; left: 50%; bottom: var(--space-md); transform: translateX(-50%); display: flex; gap: var(--space-sm); align-items: center; background: oklch(22% 0.01 85); color: oklch(97% 0.005 85); padding: var(--space-sm) var(--space-md); border-radius: 999px; font-size: var(--text-sm); z-index: 40; }
+  .proto-bar label { display: inline; margin: 0; font-weight: 400; color: inherit; }
+  .proto-bar select { width: auto; min-height: 36px; background: oklch(30% 0.01 85); color: inherit; border-color: oklch(70% 0.01 85); }
+  @media (max-width: 1023px) { .grid-2, .totals { grid-template-columns: 1fr; } }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#register-heading">本文へ移動</a>
+<header class="app"><h1>予算管理</h1><p>架空データで試す家計簿</p></header>
+<div class="banner" id="banner"></div>
+<main id="main"></main>
+<div class="proto-bar" role="region" aria-label="画面の状態の切り替え（モックアップ用）">
+  <label for="state-select">状態</label>
+  <select id="state-select"></select>
+</div>
+<script>
+'use strict';
+// すべて架空のデータ。実在の人物・口座・店舗とは無関係。
+const CATS = { 収入: ['給与', '副収入', 'その他収入'], 支出: ['食費', '住居費', '水道光熱費', '通信費', '日用品', '交通費', '娯楽', 'その他支出'] };
+const BASE = [
+  { d: '2026-10-01', k: '収入', c: '給与', a: 280000, m: '10月分の給与（架空）' },
+  { d: '2026-10-02', k: '支出', c: '住居費', a: 82000, m: '家賃（架空）' },
+  { d: '2026-10-05', k: '支出', c: '食費', a: 6420, m: 'スーパー' },
+  { d: '2026-10-08', k: '支出', c: '通信費', a: 4980, m: 'スマートフォン' },
+  { d: '2026-10-11', k: '支出', c: '食費', a: 3150, m: '外食' },
+  { d: '2026-10-12', k: '支出', c: '娯楽', a: 12800, m: '観劇' },
+  { d: '2026-10-14', k: '支出', c: '水道光熱費', a: 9870, m: '電気・ガス' }
+];
+const BUDGET = { '食費': 40000, '住居費': 82000, '水道光熱費': 12000, '通信費': 6000, '日用品': 5000, '交通費': 8000 };
+const STATES = {
+  'register-default': '登録: 通常',
+  'register-saved': '登録: 登録できた',
+  'register-validation-error': '登録: 入力に誤り',
+  'register-other-month': '登録: 別の月の日付で登録した',
+  'register-storage-error': '登録: 保存できなかった',
+  'ledger-empty': '一覧: 明細のない月',
+  'summary-negative': '集計: 差額がマイナス',
+  'summary-over-budget': '集計: 予算を超えたカテゴリ',
+  'summary-budget-unset': '集計: 予算が未設定',
+  'budget-validation-error': '予算: 入力に誤り',
+  'budget-copy-confirm': '予算: 前の月のコピーで上書きの確認',
+  'budget-copy-empty': '予算: 前の月に予算がない',
+  'csv-export-empty': 'CSV: 出力する明細がない',
+  'csv-duplicate-confirm': 'CSV: 重複の確認',
+  'csv-import-success': 'CSV: 取り込みできた',
+  'csv-import-partial-error': 'CSV: 一部の行を取り込めない',
+  'csv-import-file-rejected': 'CSV: ファイル全体を取り込めない',
+  'app-storage-corrupt': '全体: 保存データが壊れている',
+  'app-other-tab-changed': '全体: 別のタブで変更があった'
+};
+const yen = n => '¥' + n.toLocaleString('ja-JP');
+const esc = s => String(s).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+const params = new URLSearchParams(location.search);
+let state = STATES[params.get('state')] ? params.get('state') : 'register-default';
+
+function view() {
+  let month = '2026年10月', entries = BASE.slice(), budget = { ...BUDGET };
+  if (state === 'register-other-month') { month = '2026年9月'; entries = [{ d: '2026-09-28', k: '支出', c: '日用品', a: 1650, m: '洗剤' }]; }
+  if (state === 'ledger-empty') entries = [];
+  if (state === 'summary-negative') entries = BASE.filter(e => e.k === '支出').concat([{ d: '2026-10-01', k: '収入', c: '副収入', a: 50000, m: '（架空）' }]);
+  if (state === 'summary-over-budget') entries = entries.concat([{ d: '2026-10-15', k: '支出', c: '食費', a: 34330, m: 'まとめ買い' }]);
+  if (state === 'summary-budget-unset') budget = {};
+  if (state === 'csv-export-empty') entries = [];
+  return { month, entries, budget };
+}
+const locked = () => state === 'app-storage-corrupt';
+
+function banner() {
+  if (state === 'app-storage-corrupt') return `<div class="notice warn" role="alert"><strong>保存データを読み込めませんでした。データは消していません。</strong>保存データの形が壊れているため、登録・予算の保存・CSV の取り込みを止めています。ブラウザを開き直しても直らない場合は、そのままの状態で残してください。</div>`;
+  if (state === 'app-other-tab-changed') return `<div class="notice ok" role="status"><strong>別のタブで変更がありました。最新の内容を読み込みました。</strong>このタブの一覧と集計は最新です。</div>`;
+  return '';
+}
+function registerSection() {
+  const err = state === 'register-validation-error';
+  const n = {
+    'register-saved': `<div class="notice ok" role="status"><strong>登録しました</strong>10月14日 食費 ¥1,280</div>`,
+    'register-other-month': `<div class="notice ok" role="status"><strong>9月の明細として登録しました</strong>9月28日 日用品 ¥1,650。表示を2026年9月に切り替えました。</div>`,
+    'register-storage-error': `<div class="notice warn" role="alert"><strong>このブラウザに保存できませんでした</strong>入力した内容は画面に残っています。ブラウザの保存領域に空きがあるか確かめてから、もう一度「登録する」を押してください。</div>`
+  }[state] || '';
+  const dis = locked() ? 'disabled aria-describedby="lock-reason"' : '';
+  return `<section class="step" aria-labelledby="register-heading">
+    <p class="step-label">1 登録</p>
+    <h2 id="register-heading" tabindex="-1">収支を登録</h2>
+    <div aria-live="polite">${n}</div>
+    <form onsubmit="return false" novalidate>
+      <fieldset><legend>区分</legend><div class="seg">
+        <label><input type="radio" name="kind" checked><span>支出</span></label>
+        <label><input type="radio" name="kind"><span>収入</span></label></div></fieldset>
+      <div class="grid-2">
+        <div class="field ${err ? 'invalid' : ''}"><label for="f-date">日付</label>
+          <input id="f-date" type="date" value="${err ? '' : '2026-10-14'}" ${err ? 'aria-invalid="true" aria-describedby="f-date-err"' : ''}>
+          ${err ? '<p class="err" id="f-date-err">日付を入力してください。例: 2026-10-14</p>' : ''}</div>
+        <div class="field ${err ? 'invalid' : ''}"><label for="f-amount">金額（円）</label>
+          <input id="f-amount" inputmode="numeric" value="${err ? '1,28o' : ''}" placeholder="例: 1280" ${err ? 'aria-invalid="true" aria-describedby="f-amount-err"' : 'aria-describedby="f-amount-hint"'}>
+          ${err ? '<p class="err" id="f-amount-err">金額は 1〜9,999,999 の整数で入力してください。例: 1280</p>' : '<p class="hint" id="f-amount-hint">1〜9,999,999 の整数</p>'}</div>
+      </div>
+      <div class="field"><label for="f-cat">カテゴリ</label><select id="f-cat">${CATS.支出.map(c => `<option>${c}</option>`).join('')}</select></div>
+      <div class="field"><label for="f-memo">メモ（任意）</label><input id="f-memo" maxlength="100" placeholder="例: スーパー" aria-describedby="f-memo-hint"><p class="hint" id="f-memo-hint">100 文字まで</p></div>
+      <button class="primary" type="submit" ${dis}>登録する</button>
+      ${locked() ? '<p class="hint" id="lock-reason">保存データを読み込めないため、登録できません。</p>' : ''}
+    </form>
+  </section>`;
+}
+function summarySection(v) {
+  const inc = v.entries.filter(e => e.k === '収入').reduce((s, e) => s + e.a, 0);
+  const exp = v.entries.filter(e => e.k === '支出').reduce((s, e) => s + e.a, 0);
+  const diff = inc - exp;
+  const spent = {}; v.entries.filter(e => e.k === '支出').forEach(e => { spent[e.c] = (spent[e.c] || 0) + e.a; });
+  const unsetMsg = state === 'summary-budget-unset' ? `<div class="notice warn" role="status"><strong>この月の予算はまだ設定されていません</strong>予算欄に金額を入れると、実績との比較と残額が表示されます。</div>` : '';
+  const copyConfirm = state === 'budget-copy-confirm' ? `<div class="confirm" role="group" aria-labelledby="copy-confirm-h"><p id="copy-confirm-h"><strong>10月の予算を、9月の内容で上書きします</strong></p><p class="muted">9月に予算のあるカテゴリ（食費、住居費、水道光熱費、通信費、日用品、交通費）の値で置き換えます。</p><div class="actions"><button type="button" class="primary">上書きする</button><button type="button">やめる</button></div></div>` : '';
+  const copyEmpty = state === 'budget-copy-empty' ? `<div class="notice warn" role="status"><strong>前の月の予算がありません</strong>9月に予算が設定されていないため、コピーできませんでした。10月の予算は変わっていません。</div>` : '';
+  const budgetErr = state === 'budget-validation-error';
+  const dis = locked() ? 'disabled' : '';
+  return `<section class="step" aria-labelledby="summary-heading">
+    <p class="step-label">2 確認</p>
+    <h2 id="summary-heading">月次集計</h2>
+    <div class="month-nav"><button type="button" aria-label="前の月">‹ 前の月</button><strong aria-live="polite">${v.month}</strong><button type="button" aria-label="次の月">次の月 ›</button></div>
+    <div class="totals">
+      <div><div class="label">収入</div><div class="value num">${yen(inc)}</div></div>
+      <div><div class="label">支出</div><div class="value num">${yen(exp)}</div></div>
+      <div><div class="label">差額</div><div class="value num">${diff < 0 ? '−' : ''}${yen(Math.abs(diff))}</div></div>
+    </div>
+    ${unsetMsg}
+    <table><caption>支出カテゴリ別の予算と実績（予算は欄に直接入力して保存）</caption>
+      <thead><tr><th scope="col">カテゴリ</th><th scope="col" class="num">予算（円）</th><th scope="col" class="num">実績</th><th scope="col" class="num">残額</th></tr></thead>
+      <tbody>${CATS.支出.map((c, i) => {
+        const b = v.budget[c], s = spent[c] || 0, rest = b === undefined ? null : b - s;
+        const bad = budgetErr && c === '食費';
+        return `<tr><th scope="row">${c}</th>
+          <td class="num"><input class="budget ${bad ? 'invalid' : ''}" id="b-${i}" aria-label="${c}の予算（円）" inputmode="numeric" placeholder="未設定" value="${bad ? '-500' : (b === undefined ? '' : b)}" ${bad ? `aria-invalid="true" aria-describedby="b-${i}-err"` : ''} ${dis}>${bad ? `<p class="err" id="b-${i}-err">予算は 0〜9,999,999 の整数で入力してください</p>` : ''}</td>
+          <td class="num">${yen(s)}</td>
+          <td class="num">${rest === null ? '<span class="muted" aria-label="未設定">—</span>' : rest < 0 ? `<span class="over">超過 ${yen(-rest)}</span>` : yen(rest)}</td></tr>`;
+      }).join('')}</tbody></table>
+    <div class="row-actions"><button type="button" class="primary" ${dis}>予算を保存</button><button type="button" ${dis}>前の月の予算をコピー</button></div>
+    ${copyConfirm}${copyEmpty}
+    <h3 id="ledger-heading">${v.month}の明細</h3>
+    ${ledger(v)}
+  </section>`;
+}
+function ledger(v) {
+  if (!v.entries.length) return `<p class="muted">この月の明細はまだありません。上のフォームから登録するか、CSV を取り込むと、ここに表示されます。</p>`;
+  const rows = v.entries.slice().sort((x, y) => y.d.localeCompare(x.d));
+  return `<table aria-labelledby="ledger-heading"><caption>新しい順</caption>
+    <thead><tr><th scope="col">日付</th><th scope="col">区分</th><th scope="col">カテゴリ</th><th scope="col" class="num">金額</th><th scope="col">メモ</th></tr></thead>
+    <tbody>${rows.map(e => `<tr><td>${e.d.slice(5).replace('-', '/')}</td><td>${e.k}</td><td>${e.c}</td><td class="num">${e.k === '支出' ? '−' : '+'}${yen(e.a)}</td><td>${esc(e.m)}</td></tr>`).join('')}</tbody></table>`;
+}
+function csvSection() {
+  const msg = {
+    'csv-export-empty': `<div class="notice warn" role="status"><strong>出力する明細がありません</strong>明細を登録するか、CSV を取り込んでから保存してください。</div>`,
+    'csv-import-success': `<div class="notice ok" role="status"><strong>12件の明細を追加しました</strong>既存の明細はそのまま残っています。取り込めなかった行: 0件。重複として除いた行: 0件。</div>`,
+    'csv-import-partial-error': `<div class="notice warn" role="alert"><strong>8件を追加し、2件は取り込みませんでした</strong><ul><li>3行目: 金額が数字ではありません（半角数字で書いてください）</li><li>7行目: カテゴリ「ペット」は用意されていません</li></ul></div>`,
+    'csv-import-file-rejected': `<div class="notice warn" role="alert"><strong>このファイルは取り込めませんでした</strong>UTF-8 として読めませんでした。UTF-8 で保存した CSV ファイルを選んでください。明細は何も追加していません。</div>`
+  }[state] || '';
+  const dup = state === 'csv-duplicate-confirm' ? `<div class="confirm" role="group" aria-labelledby="dup-h"><p id="dup-h"><strong>既存と同じ明細が 12 件あります</strong></p><p class="muted">日付・区分・カテゴリ・金額・メモがすべて同じ明細です。明細は後から削除できないため、二重に取り込むと集計が二重になります。</p><div class="actions"><button type="button" class="primary">重複分を除いて追加</button><button type="button">すべて追加</button><button type="button">取り込みをやめる</button></div></div>` : '';
+  const dis = locked() ? 'disabled' : '';
+  return `<section class="step" aria-labelledby="csv-heading">
+    <p class="step-label">3 書き出し</p>
+    <h2 id="csv-heading">CSV</h2>
+    <div aria-live="polite">${msg}</div>
+    <p>すべての明細を CSV ファイルに保存したり、CSV ファイルの明細を追加したりできます。取り込んだ明細は既存の明細に追加され、置き換えは行いません。</p>
+    <p class="muted">CSV には明細だけが含まれ、予算は含まれません。形式: UTF-8、見出し「日付,区分,カテゴリ,金額,メモ」、日付は YYYY-MM-DD、金額は半角数字。</p>
+    <div class="row-actions"><button type="button" class="primary">明細を CSV に保存</button><label for="csv-file" class="label" style="margin:0">CSV を取り込んで追加</label><input id="csv-file" type="file" accept=".csv,text/csv" style="width:auto" ${dis}></div>
+    ${dup}
+  </section>`;
+}
+function render() {
+  const v = view();
+  document.getElementById('banner').innerHTML = banner();
+  document.getElementById('main').innerHTML = registerSection() + summarySection(v) + csvSection();
+  const sel = document.getElementById('state-select');
+  sel.innerHTML = Object.entries(STATES).map(([k, l]) => `<option value="${k}" ${k === state ? 'selected' : ''}>${l}</option>`).join('');
+}
+document.getElementById('state-select').addEventListener('change', ev => {
+  state = ev.target.value;
+  const p = new URLSearchParams(location.search); p.set('state', state);
+  history.replaceState(null, '', '?' + p.toString());
+  render();
+});
+render();
+</script>
+</body>
+</html>

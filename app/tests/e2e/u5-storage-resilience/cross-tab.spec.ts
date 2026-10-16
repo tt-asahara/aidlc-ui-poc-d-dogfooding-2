@@ -99,6 +99,8 @@ test.describe('U5: 2つのタブの性能', () => {
     for (let run = 0; run < 3; run += 1) {
       await tab1.getByLabel('金額（円）').fill(String(1000 + run));
       await tab1.getByLabel('カテゴリ').selectOption('日用品');
+      // U2 の二重送信の防止（BR1.7）で、登録のあと 300 ミリ秒は押せない。押せるようになってから測る（計測の内容は変えない）。
+      await expect(tab1.getByRole('button', { name: '登録する' })).toBeEnabled();
       await watchExpense(tab2);
       const savedAt = await tab1.evaluate(() => {
         const started = performance.timeOrigin + performance.now();

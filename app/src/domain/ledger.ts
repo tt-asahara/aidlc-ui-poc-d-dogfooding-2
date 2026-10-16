@@ -1,5 +1,6 @@
 import { isCategoryOfKind, isEntryKind } from './categoryCatalog';
 import { fail, ok, type FieldError, type Result } from './result';
+import { isRealDate, isWithinGraphemes } from './textRules';
 import type { Entry, EntryInput, EntryKind, StoreSnapshot, ValidatedEntry } from './types';
 import type { DataStore } from '../store/dataStore';
 
@@ -18,8 +19,20 @@ export const ENTRY_FIELD_LABELS = {
 
 export type EntryField = keyof typeof ENTRY_FIELD_LABELS;
 
-const DATE_FORMAT = /^\d{4}-\d{2}-\d{2}$/;
+/** 欄の下に出す理由の文（U2 BR1.1〜BR1.4、frontend-components.md の表）。 */
+export const ENTRY_FIELD_MESSAGES = {
+  kindMissing: '区分を選んでください',
+  dateMissing: '日付を入力してください',
+  dateNotReal: '存在する日付を入力してください。例: 2026-10-14',
+  amountInvalid: '金額は 1〜9,999,999 の整数で入力してください。例: 1280',
+  categoryMissing: 'カテゴリを選んでください',
+  categoryMismatch: 'カテゴリを選び直してください',
+  memoTooLong: 'メモは 100 文字までです',
+  memoLineBreak: 'メモに改行は使えません',
+} as const;
+
 const DIGITS_ONLY = /^[0-9]+$/;
+const LINE_BREAK = /[\r\n]/;
 
 /** Ledger が使う DataStore の部分（読み取りと保存の入口だけ）。 */
 export type LedgerStore = Pick<DataStore, 'getSnapshot' | 'commit'>;
@@ -31,7 +44,7 @@ export interface LedgerOptions {
 }
 
 export interface Ledger {
-  /** 保存しない規則の判定（U1 の最小限: BR1.1〜BR1.4）。 */
+  /** 保存しない規則の判定（U2 で仕上げた BR1.1〜BR1.4）。 */
   validate(input: EntryInput): Result<ValidatedEntry>;
   /** 1件の登録。ID と追加した順の番号を付けて DataStore.commit を1回呼ぶ。 */
   add(input: EntryInput): Result<Entry>;
@@ -64,28 +77,45 @@ function toText(value: unknown): string {
       : String(value);
 }
 
+/**
+ * 金額（BR1.1）。前後の空白を除いたあと、半角数字だけからなる 1〜9,999,999 の整数。
+ * 空のときも同じ文にそろえる（U1 の「金額を入力してください」から変えた。AC1.2.1）。
+ */
 function validateAmount(raw: string | number): { amount?: number; error?: string } {
   const text = toText(raw).trim();
-  if (text === '') {
-    return { error: '金額を入力してください' };
-  }
   if (!DIGITS_ONLY.test(text)) {
-    return { error: '金額は 1〜9,999,999 の整数で入力してください。例: 1280' };
+    return { error: ENTRY_FIELD_MESSAGES.amountInvalid };
   }
   const amount = Number(text);
   if (amount < AMOUNT_MIN || amount > AMOUNT_MAX) {
-    return { error: '金額は 1〜9,999,999 の整数で入力してください。例: 1280' };
+    return { error: ENTRY_FIELD_MESSAGES.amountInvalid };
   }
   return { amount };
 }
 
+/** 日付（BR1.2）。空でなく、YYYY-MM-DD の形で実在する日付。範囲の制限はない。 */
+function validateDate(raw: string): { date: string; error?: string } {
+  const date = toText(raw).trim();
+  if (date === '') {
+    return { date, error: ENTRY_FIELD_MESSAGES.dateMissing };
+  }
+  if (!isRealDate(date)) {
+    return { date, error: ENTRY_FIELD_MESSAGES.dateNotReal };
+  }
+  return { date };
+}
+
+/**
+ * メモ（BR1.4）。任意。前後の空白を除いたあと、見える1文字で 100 文字まで、改行なし。
+ * 数え方は保存データの検査（validateSnapshot）と同じ textRules の関数を使う（NFR5.1）。
+ */
 function validateMemo(raw: string): { memo: string; error?: string } {
   const memo = toText(raw).trim();
-  if (/[\r\n]/.test(memo)) {
-    return { memo, error: 'メモに改行は使えません' };
+  if (LINE_BREAK.test(memo)) {
+    return { memo, error: ENTRY_FIELD_MESSAGES.memoLineBreak };
   }
-  if (memo.length > MEMO_MAX_LENGTH) {
-    return { memo, error: 'メモは 100 文字までです' };
+  if (!isWithinGraphemes(memo, MEMO_MAX_LENGTH)) {
+    return { memo, error: ENTRY_FIELD_MESSAGES.memoTooLong };
   }
   return { memo };
 }
@@ -108,19 +138,21 @@ function entriesOf(snapshot: StoreSnapshot | null): readonly Entry[] {
 export function createLedger(options: LedgerOptions): Ledger {
   const newId = options.newId ?? defaultNewId;
 
+  /**
+   * 入力の規則の1か所（U2 BR1.1〜BR1.4、NFR4.2）。画面と CSV の取り込みの両方が使う。
+   * fieldErrors は区分・日付・金額・カテゴリ・メモの順に並べる（BR1.5 のまとめと最初の誤りの欄に使う）。
+   */
   function validate(input: EntryInput): Result<ValidatedEntry> {
     const errors: FieldError[] = [];
     const kindText = toText(input.kind).trim();
     const kind: EntryKind | null = isEntryKind(kindText) ? kindText : null;
     if (!kind) {
-      errors.push({ field: 'kind', message: '区分を選んでください' });
+      errors.push({ field: 'kind', message: ENTRY_FIELD_MESSAGES.kindMissing });
     }
 
-    const date = toText(input.date).trim();
-    if (date === '') {
-      errors.push({ field: 'date', message: '日付を入力してください' });
-    } else if (!DATE_FORMAT.test(date)) {
-      errors.push({ field: 'date', message: '日付は YYYY-MM-DD の形で入力してください' });
+    const dateCheck = validateDate(input.date);
+    if (dateCheck.error) {
+      errors.push({ field: 'date', message: dateCheck.error });
     }
 
     const amountCheck = validateAmount(input.amount);
@@ -130,9 +162,9 @@ export function createLedger(options: LedgerOptions): Ledger {
 
     const category = toText(input.category).trim();
     if (category === '') {
-      errors.push({ field: 'category', message: 'カテゴリを選んでください' });
+      errors.push({ field: 'category', message: ENTRY_FIELD_MESSAGES.categoryMissing });
     } else if (kind && !isCategoryOfKind(category, kind)) {
-      errors.push({ field: 'category', message: '区分に合うカテゴリを選んでください' });
+      errors.push({ field: 'category', message: ENTRY_FIELD_MESSAGES.categoryMismatch });
     }
 
     const memoCheck = validateMemo(input.memo);
@@ -143,7 +175,13 @@ export function createLedger(options: LedgerOptions): Ledger {
     if (errors.length > 0 || !kind || amountCheck.amount === undefined) {
       return fail('VALIDATION', '入力を確かめてください', errors);
     }
-    return ok({ date, kind, category, amount: amountCheck.amount, memo: memoCheck.memo });
+    return ok({
+      date: dateCheck.date,
+      kind,
+      category,
+      amount: amountCheck.amount,
+      memo: memoCheck.memo,
+    });
   }
 
   function assignIdentities(

@@ -45,8 +45,19 @@ describe('EntryFormView', () => {
     expect(amountInput()).toHaveValue('');
     expect(categorySelect()).toHaveValue('');
     expect(memoInput()).toHaveValue('');
-    expect(memoInput()).toHaveAttribute('maxLength', '100');
     expect(submitButton()).toBeEnabled();
+  });
+
+  // U2 で置き換え（NFR 設計レビュー R-03）: maxLength は UTF-16 の単位で数え、絵文字を含むと 100 文字より前で止まるため外した（W4）。
+  // 代わりに、メモ欄の値が見える1文字で 100 文字に切り詰められることを確かめる。
+  it('メモ欄は maxLength を使わず、101 文字目の入力で値を 100 文字に切り詰める（BR1.4、AC1.2.4）', () => {
+    renderForm();
+
+    fireEvent.change(memoInput(), { target: { value: 'あ'.repeat(101) } });
+
+    expect(memoInput()).not.toHaveAttribute('maxLength');
+    expect(memoInput()).toHaveValue('あ'.repeat(100));
+    expect(screen.getByText('メモは 100 文字までです')).toBeVisible();
   });
 
   it('カテゴリの選択肢は区分に合うものだけ（AC1.1.2）', async () => {

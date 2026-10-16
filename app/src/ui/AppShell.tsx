@@ -150,11 +150,14 @@ function AppShellContent({ services }: AppShellProps) {
             ledger={services.ledger}
             storeStatus={appState.storeStatus}
             today={boot.today}
+            selectedMonth={appState.selectedMonth}
+            onSelectMonth={selectMonth}
           />
         </SectionBoundary>
         <SectionBoundary label="2 確認" testId="review-section-error">
           <ReviewView
             summary={services.summary}
+            ledger={services.ledger}
             month={appState.selectedMonth}
             storeStatus={appState.storeStatus}
             dataVersion={dataVersion}

@@ -30,6 +30,8 @@ function renderReview(
   const services = setup(options.entries);
   const props = {
     summary: services.summary,
+    // U2 で ReviewView が明細の一覧のために ledger を受け取るようになった（確かめる内容は変えない）。
+    ledger: services.ledger,
     month: options.month ?? '2026-10',
     storeStatus: options.storeStatus ?? ('ready' as StoreStatus),
     onSelectMonth: options.onSelectMonth ?? (() => undefined),
@@ -95,7 +97,9 @@ describe('ReviewView', () => {
   it('予算が設定されていないカテゴリは予算「未設定」、残額「—」と表示する（BR2.7）', () => {
     renderReview({ entries: october() });
 
-    const rows = within(screen.getByRole('table')).getAllByRole('row').slice(1);
+    // U2 で明細の一覧の表が加わったため、カテゴリ別の表を名前で選ぶ（確かめる内容は変えない）。
+    const table = screen.getByRole('table', { name: '支出カテゴリ別の予算と実績' });
+    const rows = within(table).getAllByRole('row').slice(1);
     for (const row of rows) {
       const cells = within(row).getAllByRole('cell');
       expect(cells[0]).toHaveTextContent('未設定');

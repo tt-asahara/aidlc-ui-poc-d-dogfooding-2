@@ -1,4 +1,4 @@
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { fail, ok } from '../../../src/domain/result';
@@ -134,6 +134,8 @@ describe('AppShell', () => {
       JSON.stringify(makeSnapshot([makeEntry({ date: '2026-10-01', amount: 7000 })], 9)),
     );
     await user.type(screen.getByLabelText('金額（円）'), '500');
+    // U2 の二重送信の防止（BR1.7）で、登録のあと 300 ミリ秒は「登録する」が押せない。押せるようになってから押す。
+    await waitFor(() => expect(screen.getByRole('button', { name: '登録する' })).toBeEnabled());
     await user.click(screen.getByRole('button', { name: '登録する' }));
 
     expect(screen.getByRole('alert')).toHaveTextContent('別のタブで変更があったため');

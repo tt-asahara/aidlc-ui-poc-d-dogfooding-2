@@ -1,0 +1,30 @@
+{
+  "stage": "code-generation",
+  "unit": "u2-entry-and-ledger",
+  "version": 1,
+  "writes": [
+    { "path": "app/README.md" },
+    { "path": "app/src/domain/ledger.ts" },
+    { "path": "app/src/domain/textRules.ts" },
+    { "path": "app/src/domain/validateSnapshot.ts" },
+    { "path": "app/src/ui/AppShell.tsx" },
+    { "path": "app/src/ui/EntryFormView.tsx" },
+    { "path": "app/src/ui/LedgerList.tsx" },
+    { "path": "app/src/ui/ReviewView.tsx" },
+    { "path": "app/src/ui/styles/app.css" },
+    { "path": "app/tests/e2e/support/u2.ts" },
+    { "path": "app/tests/e2e/u1-walking-skeleton/performance.spec.ts" },
+    { "path": "app/tests/e2e/u2-entry-and-ledger/double-submit-and-memo.spec.ts" },
+    { "path": "app/tests/e2e/u2-entry-and-ledger/ledger.spec.ts" },
+    { "path": "app/tests/e2e/u2-entry-and-ledger/other-month.spec.ts" },
+    { "path": "app/tests/e2e/u2-entry-and-ledger/validation.spec.ts" },
+    { "path": "app/tests/e2e/u5-storage-resilience/cross-tab.spec.ts" },
+    { "path": "app/tests/unit/domain/ledgerRules.test.ts" },
+    { "path": "app/tests/unit/domain/textRules.test.ts" },
+    { "path": "app/tests/unit/ui/AppShell.test.tsx" },
+    { "path": "app/tests/unit/ui/EntryFormView.test.tsx" },
+    { "path": "app/tests/unit/ui/EntryFormView.u2.test.tsx" },
+    { "path": "app/tests/unit/ui/LedgerList.test.tsx" },
+    { "path": "app/tests/unit/ui/ReviewView.test.tsx" }
+  ]
+}

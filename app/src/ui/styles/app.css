@@ -165,6 +165,22 @@ select[aria-invalid='true'] {
   border: 2px solid var(--warn);
 }
 
+/*
+  欄の下の誤りの文（U2 BR1.5、詳細モックアップの register-validation-error）。
+  色だけで伝えないよう、欄の枠を太くし（上の aria-invalid の指定）、文を太字で出す。
+*/
+.field-error {
+  color: var(--warn);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  margin: var(--space-xs) 0 0;
+}
+
+/* 区分の2択は枠が1つのため、誤りのときは枠全体を太くする。 */
+.seg:has(input[aria-invalid='true']) {
+  border: 2px solid var(--warn);
+}
+
 ::placeholder {
   color: var(--ink-2);
   opacity: 1;
@@ -331,6 +347,26 @@ tbody th {
 
 .muted {
   color: var(--ink-2);
+}
+
+/*
+  明細の一覧（U2 BR3.1〜BR3.5、詳細モックアップの register-default の一覧と ledger-empty）。
+  見出しは「2 確認」の中の小見出し。メモの列の中で折り返し、表の幅は変えない（BR3.3）。
+*/
+h3 {
+  font-size: var(--text-base);
+  margin: var(--space-lg) 0 var(--space-sm);
+}
+
+.ledger-date {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.ledger-table td.memo {
+  overflow-wrap: anywhere;
+  word-break: normal;
+  white-space: normal;
 }
 
 .row-actions {

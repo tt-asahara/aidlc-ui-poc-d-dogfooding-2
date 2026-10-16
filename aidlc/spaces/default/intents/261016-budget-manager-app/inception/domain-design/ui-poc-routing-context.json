@@ -1,0 +1,9 @@
+{
+  "stage": "domain-design",
+  "scope": "ui-poc-application",
+  "recordId": "261016-budget-manager-app",
+  "attempt": 1,
+  "unit": null,
+  "engineStateSha256": "2a60816db1d1dd6cdfa785accabdf33479263a6443b918982fbeb7bb3a675da5",
+  "note": "Recorded honestly as the actual workflow scope (ui-poc-application). The Arm C routing checker only accepts ui-poc-comparison, so this context is expected to be rejected by that check, as at earlier stages."
+}

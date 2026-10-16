@@ -1,0 +1,24 @@
+{
+  "stage": "domain-design",
+  "upstream_ids": ["US1.1", "US1.2", "US1.3", "US2.1", "US3.1", "US3.2", "US4.1", "US4.2", "US5.1", "US5.2", "US6.1", "US6.2", "US6.3", "US7.1", "US7.2", "US7.3", "US7.4", "US8.1"],
+  "coverage": [
+    { "id": "US1.1", "status": "OK", "target": "EntryFormView, Ledger, CategoryCatalog" },
+    { "id": "US1.2", "status": "OK", "target": "EntryFormView, Ledger" },
+    { "id": "US1.3", "status": "OK", "target": "EntryFormView, AppShell" },
+    { "id": "US2.1", "status": "OK", "target": "ReviewView, Ledger" },
+    { "id": "US3.1", "status": "OK", "target": "ReviewView, MonthlySummary" },
+    { "id": "US3.2", "status": "OK", "target": "ReviewView, MonthlySummary" },
+    { "id": "US4.1", "status": "OK", "target": "ReviewView, Budget" },
+    { "id": "US4.2", "status": "OK", "target": "ReviewView, Budget" },
+    { "id": "US5.1", "status": "OK", "target": "ExportView, CsvExchange" },
+    { "id": "US5.2", "status": "OK", "target": "CsvExchange" },
+    { "id": "US6.1", "status": "OK", "target": "ExportView, CsvExchange, Ledger" },
+    { "id": "US6.2", "status": "OK", "target": "CsvExchange" },
+    { "id": "US6.3", "status": "OK", "target": "CsvExchange, Ledger" },
+    { "id": "US7.1", "status": "OK", "target": "SampleDataSeeder" },
+    { "id": "US7.2", "status": "OK", "target": "DataStore" },
+    { "id": "US7.3", "status": "OK", "target": "DataStore, NoticeBannerView, EntryFormView" },
+    { "id": "US7.4", "status": "OK", "target": "DataStore, NoticeBannerView" },
+    { "id": "US8.1", "status": "OK", "target": "AppShell, EntryFormView, ReviewView, ExportView" }
+  ]
+}

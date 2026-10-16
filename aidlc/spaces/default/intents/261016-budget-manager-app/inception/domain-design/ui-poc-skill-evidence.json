@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "arm": "C",
+  "stage": "domain-design",
+  "configSha256": "6952170119a76c575da2d67cc7cc40ad44b6f85c5e2cd50e4b621bd68f5e9986",
+  "note": "Context and facts hashes are not bound because the workflow scope is ui-poc-application, which the Arm C routing checker does not accept.",
+  "events": [
+    {"type": "skill-skipped", "skill": "domain-modeling", "condition": "unresolved_domain_terms_or_boundaries", "reason": "No unresolved terms or boundaries: entry, category, monthly budget, monthly summary and CSV import/export are used consistently across requirements, stories and mockups, and the requester settled the four boundary choices in domain-design Q1-Q4."}
+  ]
+}

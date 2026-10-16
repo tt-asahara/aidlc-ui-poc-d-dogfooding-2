@@ -36,8 +36,18 @@ describe("project-local PR Lens review", () => {
     writeFileSync(graphPath, JSON.stringify({ provenance: { base: { sha: context.base }, head: { sha: context.head } } })); writeFileSync(manifestPath, "{}\n"); writeFileSync(testPath, "1 passed\n");
     const reportPath = join(root, ".pr-lens", "review.md"); writeFileSync(reportPath, "## Scope and provenance\n## Findings\n## Diagram cross-check\n## Tests and limits\n");
     const metadataPath = join(root, ".pr-lens", "review.json"); writeFileSync(metadataPath, JSON.stringify({ schemaVersion: 1, prLensSha: "7a9115c8202da4db030be5954ada8862e6135dce", context: { path: ".pr-lens/review-context.json", sha256: hash(contextPath), preparedWorktreeHash: context.preparedWorktreeHash }, reviewedPaths: ["app.ts"], graph: { path: ".pr-lens/graph.json", sha256: hash(graphPath) }, renderManifest: { path: ".pr-lens/manifest.json", sha256: hash(manifestPath) }, testEvidence: [{ path: ".pr-lens/tests.txt", sha256: hash(testPath) }], semanticCrossCheck: { performedBy: "ai-reviewer", disclaimer: "semantic source/requirements/test comparison is an AI judgment, not a machine guarantee" } }));
-    expect(run(root, ["verify-report", "--context", ".pr-lens/review-context.json", "--report", ".pr-lens/review.md", "--metadata", ".pr-lens/review.json"]).status).toBe(0);
-    writeFileSync(join(root, "app.ts"), "export const x = 2;\n"); expect(run(root, ["verify-report", "--context", ".pr-lens/review-context.json", "--report", ".pr-lens/review.md", "--metadata", ".pr-lens/review.json"]).status).not.toBe(0);
+    const verify = () => run(root, ["verify-report", "--context", ".pr-lens/review-context.json", "--report", ".pr-lens/review.md", "--metadata", ".pr-lens/review.json"]).status;
+    expect(verify()).toBe(0);
+    writeFileSync(join(root, "late.ts"), "export const late = true;\n"); expect(verify()).not.toBe(0); rmSync(join(root, "late.ts"));
+    rmSync(join(root, "app.ts")); expect(verify()).not.toBe(0); writeFileSync(join(root, "app.ts"), "export const x = 1;\n");
+    writeFileSync(join(root, "renamed.ts"), readFileSync(join(root, "app.ts"))); rmSync(join(root, "app.ts")); expect(verify()).not.toBe(0); rmSync(join(root, "renamed.ts")); writeFileSync(join(root, "app.ts"), "export const x = 1;\n");
+    spawnSync("git", ["add", "app.ts"], { cwd: root }); spawnSync("git", ["commit", "-qm", "advance head"], { cwd: root }); expect(verify()).not.toBe(0);
+  });
+
+  test("AI-DLC intent artifacts are supporting evidence only and cannot create an application review", () => {
+    const root = repo(); const base = spawnSync("git", ["rev-parse", "HEAD"], { cwd: root, encoding: "utf8" }).stdout.trim();
+    const record = join(root, "aidlc", "spaces", "default", "intents", "budget", "inception", "requirements-analysis"); mkdirSync(record, { recursive: true }); writeFileSync(join(record, "requirements.md"), "# Requirements\n");
+    const result = run(root, ["prepare", "--base", base]); expect(result.status).not.toBe(0); expect(result.stderr).toContain("no application diff exists");
   });
 
   test("formal contribution survives a clean recompose", () => {

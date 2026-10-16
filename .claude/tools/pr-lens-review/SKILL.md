@@ -8,7 +8,7 @@ user-invocable: false
 
 Use only after application code and test evidence exist. This comprehension aid never replaces AI-DLC reviewers, sensors, approval gates, or test verdicts.
 
-1. Resolve the approved comparison base from the active Intent. Run `bun .claude/tools/pr-lens-review.ts prepare --base <sha>`. If no application diff exists, record review unavailable; never diagram setup or AI-DLC state.
+1. Resolve the approved comparison base from the active Intent. Run `bun .claude/tools/pr-lens-review.ts prepare --base <sha>`. If no application diff exists, record `no-app-diff` / review unavailable and do not claim success. Setup/plugin/tool/docs integration files are excluded. All `aidlc/` artifacts are supporting specification/test evidence only and never application diff; never diagram them as implementation.
 2. Read the pinned `.vendor/pr-lens/packages/agent-skill/manual.md`, `references/graph-document.md`, and `references/example.graph.json`. Author `.pr-lens/graph.json` from the prepared context and affected source. Binary inputs are hash/metadata-only and require separate safe inspection. Do not use `analyze`, API keys, canvas, or publication.
 3. Run `bun .claude/tools/pr-lens-review.ts validate-render`. Treat any failure or diagram/source disagreement as an explicit limitation.
 4. Write `<record>/construction/build-and-test/pr-lens-review.md` with `## Scope and provenance`, `## Findings`, `## Diagram cross-check`, and `## Tests and limits`. Findings require severity, source path/line, evidence, fix, and fact/inference labeling.

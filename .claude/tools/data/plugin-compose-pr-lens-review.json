@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
   "name": "pr-lens-review",
-  "version": "0.1.0",
-  "sourceHash": "sha256:b615c9ccbf6f431cc6c71c7ffc9252d711c0206bd6f4b123bcb60a04bbe4f381"
+  "version": "0.1.1",
+  "sourceHash": "sha256:b8b4326073ecdd714665af6d3a1e45bc9da9bd1cbee78dc77cc99f4a9ac22f8f"
 }

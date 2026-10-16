@@ -8,7 +8,7 @@
     {
       "name": "aidlc-pr-lens-review",
       "source": ".",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "description": "Project-local evidence-backed PR Lens review"
     }
   ]

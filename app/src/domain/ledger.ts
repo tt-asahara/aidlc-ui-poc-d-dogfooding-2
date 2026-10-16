@@ -35,6 +35,11 @@ export interface Ledger {
   validate(input: EntryInput): Result<ValidatedEntry>;
   /** 1件の登録。ID と追加した順の番号を付けて DataStore.commit を1回呼ぶ。 */
   add(input: EntryInput): Result<Entry>;
+  /**
+   * 複数件の採番（U5 BR4.5）。入力の順に、既存の最大の addedOrder の続きから番号を振り、
+   * ID は既存とも入力どうしとも重ならないものを付ける。保存はしない。
+   */
+  assignIdentities(validated: readonly ValidatedEntry[], existing: readonly Entry[]): Entry[];
   /** その月の明細。日付の新しい順、同じ日付は addedOrder の大きい順。 */
   listByMonth(month: string): Entry[];
   /** すべての明細。日付の古い順、同じ日付は addedOrder の小さい順（CSV 出力用）。 */
@@ -141,13 +146,21 @@ export function createLedger(options: LedgerOptions): Ledger {
     return ok({ date, kind, category, amount: amountCheck.amount, memo: memoCheck.memo });
   }
 
-  function createUniqueId(existing: readonly Entry[]): string {
+  function assignIdentities(
+    validated: readonly ValidatedEntry[],
+    existing: readonly Entry[],
+  ): Entry[] {
     const usedIds = new Set(existing.map((entry) => entry.entryId));
-    let id = newId();
-    while (usedIds.has(id)) {
-      id = newId();
-    }
-    return id;
+    let addedOrder = existing.reduce((max, entry) => Math.max(max, entry.addedOrder), 0);
+    return validated.map((value) => {
+      let entryId = newId();
+      while (usedIds.has(entryId)) {
+        entryId = newId();
+      }
+      usedIds.add(entryId);
+      addedOrder += 1;
+      return { ...value, entryId, addedOrder };
+    });
   }
 
   function add(input: EntryInput): Result<Entry> {
@@ -159,15 +172,7 @@ export function createLedger(options: LedgerOptions): Ledger {
     if (!snapshot) {
       return fail('STORE_UNREADABLE', '保存データを読み込めませんでした。データは消していません');
     }
-    const maxAddedOrder = snapshot.entries.reduce(
-      (max, entry) => Math.max(max, entry.addedOrder),
-      0,
-    );
-    const entry: Entry = {
-      ...validated.value,
-      entryId: createUniqueId(snapshot.entries),
-      addedOrder: maxAddedOrder + 1,
-    };
+    const [entry] = assignIdentities([validated.value], snapshot.entries) as [Entry];
     const committed = options.store.commit({
       expectedRevision: snapshot.revision,
       entriesToAdd: [entry],
@@ -186,5 +191,5 @@ export function createLedger(options: LedgerOptions): Ledger {
     return [...entriesOf(options.store.getSnapshot())].sort(compareAscending);
   }
 
-  return { validate, add, listByMonth, listAll };
+  return { validate, add, assignIdentities, listByMonth, listAll };
 }

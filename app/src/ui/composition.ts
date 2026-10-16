@@ -6,6 +6,7 @@ import {
   type MonthlySummary,
 } from '../domain/monthlySummary';
 import { fail, ok, type Result } from '../domain/result';
+import { createSampleDataSeeder } from '../domain/sampleDataSeeder';
 import type { StoreSnapshot } from '../domain/types';
 import { createDataStore, type DataStore, type StorageLike } from '../store/dataStore';
 
@@ -30,6 +31,8 @@ export interface AppServices {
   readonly download: DownloadFile;
   /** 「今日」を決める時刻。AppShell が1か所で使う（BR2.1、BR3.4）。 */
   readonly now: () => Date;
+  /** タブ間の知らせの受け取りと、DataStore の受け取り手をすべて外す（U5。テストと画面の片付け用）。 */
+  readonly dispose: () => void;
 }
 
 export interface AppServicesOptions {
@@ -45,7 +48,11 @@ export function createEmptyBudgetSource(): BudgetSource {
   return { getMonth: () => [] };
 }
 
-/** U1 のサンプル投入: 何も保存せず、DataStore の今の内容をそのまま ok で返す。U5 が差し替える。 */
+/**
+ * U1 のサンプル投入: 何も保存せず、DataStore の今の内容をそのまま ok で返す。
+ * ブラウザの組み立て（createBrowserAppServices）は U5 で SampleDataSeeder に差し替えた。
+ * createAppServices の既定はこのままにし、U1 のテストがサンプルなしの組み立てで動くようにする。
+ */
 export function createNoopSampleSeeder(store: Pick<DataStore, 'getSnapshot'>): SampleSeeder {
   return {
     seedIfEmpty() {
@@ -92,5 +99,27 @@ export function createAppServices(options: AppServicesOptions = {}): AppServices
   const seeder = options.createSeeder
     ? options.createSeeder(store, ledger)
     : createNoopSampleSeeder(store);
-  return { store, ledger, summary, csv, seeder, download: options.download ?? downloadFile, now };
+  return {
+    store,
+    ledger,
+    summary,
+    csv,
+    seeder,
+    download: options.download ?? downloadFile,
+    now,
+    dispose: () => store.dispose(),
+  };
+}
+
+/** U5 のサンプル投入の差し込み口: SampleDataSeeder（C9、BR4.1〜BR4.5）。 */
+export function createSampleSeeder(store: DataStore, ledger: Ledger): SampleSeeder {
+  return createSampleDataSeeder({ store, ledger });
+}
+
+/**
+ * ブラウザで使う組み立て（main.tsx から呼ぶ）。サンプル投入の差し込み口を SampleDataSeeder に差し替える。
+ * 保存領域は window.localStorage（省略時）。テストは createAppServices に偽物を渡して組み立てる。
+ */
+export function createBrowserAppServices(options: AppServicesOptions = {}): AppServices {
+  return createAppServices({ createSeeder: createSampleSeeder, ...options });
 }

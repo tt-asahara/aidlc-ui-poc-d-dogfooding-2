@@ -7,8 +7,43 @@ export { STORAGE_KEY };
 /** テストの「今日」（地域の時刻）。AC3.1.4 の例と同じ 2026年10月16日。 */
 export const TEST_TODAY = new Date('2026-10-16T10:00:00');
 
-/** 「今日」を固定してからアプリを開く。時計の進み（タイマー）は止めない。 */
+/** 明細も予算もない保存データ（通し番号 0）。初回のサンプル投入（U5）を起こさずに空から始めるために使う。 */
+export const EMPTY_STORE_TEXT = JSON.stringify({
+  schemaVersion: 1,
+  revision: 0,
+  savedAt: '2026-10-16T00:00:00.000Z',
+  entries: [],
+  budgets: [],
+});
+
+/**
+ * 「今日」を固定してからアプリを開く。時計の進み（タイマー）は止めない。
+ *
+ * U5 で、保存データがないときは初回のサンプルが入るようになった。U1 のテストはサンプルを前提にしないため、
+ * ページの読み込みのたびに、保存データがなければ空の保存データ（通し番号 0）を置いてから開く。
+ * 保存データがあるとき（登録のあとや、壊れた保存データを置いたあとの開き直し）は何もしない。
+ * 書き込みが失敗する環境（容量不足のテスト）では置けないため、そのまま開く（サンプル投入も失敗して空のまま）。
+ */
 export async function openApp(page: Page): Promise<void> {
+  await page.addInitScript(
+    ([key, value]) => {
+      try {
+        if (window.localStorage.getItem(key) === null) {
+          window.localStorage.setItem(key, value);
+        }
+      } catch {
+        // 保存領域が使えないテストでは置かない。
+      }
+    },
+    [STORAGE_KEY, EMPTY_STORE_TEXT] as const,
+  );
+  await page.clock.setFixedTime(TEST_TODAY);
+  await page.goto('/');
+  await expect(page.getByRole('heading', { level: 1, name: '予算管理' })).toBeVisible();
+}
+
+/** 初回のサンプル投入（U5）を確かめるため、保存領域に何も置かずに、「今日」を固定して開く。 */
+export async function openFirstRun(page: Page): Promise<void> {
   await page.clock.setFixedTime(TEST_TODAY);
   await page.goto('/');
   await expect(page.getByRole('heading', { level: 1, name: '予算管理' })).toBeVisible();

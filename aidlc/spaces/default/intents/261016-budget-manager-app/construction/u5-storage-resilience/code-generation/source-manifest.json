@@ -1,0 +1,31 @@
+{
+  "stage": "code-generation",
+  "unit": "u5-storage-resilience",
+  "version": 1,
+  "writes": [
+    { "path": "app/README.md" },
+    { "path": "app/src/domain/ledger.ts" },
+    { "path": "app/src/domain/types.ts" },
+    { "path": "app/src/domain/sampleDataSeeder.ts" },
+    { "path": "app/src/domain/validateSnapshot.ts" },
+    { "path": "app/src/store/dataStore.ts" },
+    { "path": "app/src/ui/AppShell.tsx" },
+    { "path": "app/src/ui/composition.ts" },
+    { "path": "app/src/ui/main.tsx" },
+    { "path": "app/src/ui/NoticeBannerView.tsx" },
+    { "path": "app/src/ui/styles/app.css" },
+    { "path": "app/tests/e2e/support/app.ts" },
+    { "path": "app/tests/e2e/support/u5.ts" },
+    { "path": "app/tests/e2e/u5-storage-resilience/accessibility.spec.ts" },
+    { "path": "app/tests/e2e/u5-storage-resilience/corrupt.spec.ts" },
+    { "path": "app/tests/e2e/u5-storage-resilience/cross-tab.spec.ts" },
+    { "path": "app/tests/e2e/u5-storage-resilience/sample.spec.ts" },
+    { "path": "app/tests/e2e/u5-storage-resilience/unavailable.spec.ts" },
+    { "path": "app/tests/unit/domain/ledgerIdentities.test.ts" },
+    { "path": "app/tests/unit/domain/sampleDataSeeder.test.ts" },
+    { "path": "app/tests/unit/domain/validateSnapshot.test.ts" },
+    { "path": "app/tests/unit/store/dataStore.u5.test.ts" },
+    { "path": "app/tests/unit/ui/AppShell.u5.test.tsx" },
+    { "path": "app/tests/unit/ui/NoticeBannerView.test.tsx" }
+  ]
+}

@@ -102,10 +102,15 @@ export interface MonthSummary {
 
 export type StoreStatus = 'ready' | 'unreadable';
 
+/** 起動時に保存領域へアクセスできたか（U5 BR3.1）。使っている間は変えない。 */
+export type StorageAvailability = 'available' | 'unavailable';
+
 /** 画面に伝える状態（C6）。 */
 export interface AppState {
   /** YYYY-MM */
   readonly selectedMonth: string;
   readonly storeStatus: StoreStatus;
   readonly lastExternalChangeAt: string | null;
+  /** 起動時に保存領域が使えたか（U5 BR3.1）。偽なら全体のお知らせ枠に BR5.3 を出す。 */
+  readonly storageAvailable: boolean;
 }

@@ -341,6 +341,51 @@ tbody th {
   margin-top: var(--space-md);
 }
 
+/*
+  全体のお知らせ枠（U5 NoticeBannerView、BR5.1〜BR5.4）。見出しと「1 登録」の間に置く。
+  知らせがないときは高さを持たない。alert は警告の色と太い左の線、status は落ち着いた色。
+  文字はどちらも --ink（背景とのコントラストは 4.5:1 を十分に上回る）。色だけで種類を伝えないよう、見出しの文字を付ける。
+*/
+.banner {
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+}
+
+.notice.app-notice {
+  margin: var(--space-md) 0 0;
+  color: var(--ink);
+}
+
+.notice.warn.app-notice {
+  border-left: 0.375rem solid var(--warn);
+}
+
+.notice.ok.app-notice {
+  border-left: 0.25rem solid var(--accent);
+}
+
+.notice-label {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-xs);
+}
+
+.notice-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm) var(--space-md);
+}
+
+.notice-close {
+  background: var(--paper);
+  flex-shrink: 0;
+}
+
 /* 768〜1023px では2列の部分（日付と金額、収入・支出・差額）を1列にする（NFR6.2）。 */
 @media (max-width: 1023px) {
   .grid-2,

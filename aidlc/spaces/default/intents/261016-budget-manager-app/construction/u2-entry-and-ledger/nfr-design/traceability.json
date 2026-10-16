@@ -1,0 +1,31 @@
+{
+  "stage": "nfr-design",
+  "unit": "u2-entry-and-ledger",
+  "upstream_ids": [
+    "NFR1.1", "NFR1.2", "NFR1.3",
+    "NFR2.1", "NFR2.2", "NFR2.3",
+    "NFR3.1",
+    "NFR4.1", "NFR4.2",
+    "NFR5.1", "NFR5.2", "NFR5.3",
+    "NFR6.1", "NFR6.2",
+    "NFR7.1", "NFR7.2"
+  ],
+  "coverage": [
+    { "id": "NFR1.1", "status": "OK", "target": "performance-design.md: 表示中の月だけの取り出し、entryId の key、Chromium での計測" },
+    { "id": "NFR1.2", "status": "OK", "target": "performance-design.md: 月の切り替えの計測" },
+    { "id": "NFR1.3", "status": "OK", "target": "performance-design.md: ref の鍵と 300 ミリ秒、時計を進める境目のテストと dblclick のテスト" },
+    { "id": "NFR2.1", "status": "OK", "target": "performance-design.md: 誤りの文の id と aria-describedby・aria-invalid" },
+    { "id": "NFR2.2", "status": "OK", "target": "performance-design.md: 4つの状態の axe の検査" },
+    { "id": "NFR2.3", "status": "OK", "target": "performance-design.md: caption と列見出し・行見出し" },
+    { "id": "NFR3.1", "status": "OK", "target": "security-design.md: U1 の CSP と外部通信のテストを変えずに通す" },
+    { "id": "NFR4.1", "status": "OK", "target": "security-design.md: React の通常の表示と react/no-danger" },
+    { "id": "NFR4.2", "status": "OK", "target": "security-design.md: 規則は Ledger.validate の1か所" },
+    { "id": "NFR5.1", "status": "OK", "target": "security-design.md と performance-design.md: textRules の共有と境界の値のテスト" },
+    { "id": "NFR5.2", "status": "OK", "target": "security-design.md: サンプル全件を Ledger.validate に通すテスト" },
+    { "id": "NFR5.3", "status": "OK", "target": "security-design.md: 検証の前に鍵を確かめる" },
+    { "id": "NFR6.1", "status": "OK", "target": "performance-design.md: 絵文字の 100 文字の3ブラウザのテスト" },
+    { "id": "NFR6.2", "status": "OK", "target": "performance-design.md: 変換中の ref と事象のテスト、手での確認の手順" },
+    { "id": "NFR7.1", "status": "OK", "target": "performance-design.md: 確認コマンドでカバレッジ 80%" },
+    { "id": "NFR7.2", "status": "OK", "target": "performance-design.md: U1 のテストの扱い" }
+  ]
+}

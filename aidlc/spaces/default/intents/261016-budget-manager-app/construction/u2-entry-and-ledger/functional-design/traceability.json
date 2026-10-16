@@ -1,0 +1,33 @@
+{
+  "stage": "functional-design",
+  "unit": "u2-entry-and-ledger",
+  "upstream_ids": [
+    "AC1.1.1", "AC1.1.2", "AC1.1.3", "AC1.1.4", "AC1.1.5", "AC1.1.6",
+    "AC1.2.1", "AC1.2.2", "AC1.2.3", "AC1.2.4", "AC1.2.5",
+    "AC1.3.1", "AC1.3.2",
+    "AC2.1.1", "AC2.1.2", "AC2.1.3", "AC2.1.4"
+  ],
+  "coverage": [
+    { "id": "AC1.1.1", "status": "N/A", "target": "u1-walking-skeleton で実装済み（登録と成功の知らせ）" },
+    { "id": "AC1.1.2", "status": "N/A", "target": "u1-walking-skeleton で実装済み（区分ごとの選択肢）" },
+    { "id": "AC1.1.3", "status": "N/A", "target": "u1-walking-skeleton で実装済み（区分の切り替えで解除）" },
+    { "id": "AC1.1.4", "status": "OK", "target": "BR1.7" },
+    { "id": "AC1.1.5", "status": "OK", "target": "BR3.3" },
+    { "id": "AC1.1.6", "status": "OK", "target": "BR3.4" },
+    { "id": "AC1.2.1", "status": "OK", "target": "BR1.1, BR1.5" },
+    { "id": "AC1.2.2", "status": "OK", "target": "BR1.1" },
+    { "id": "AC1.2.3", "status": "OK", "target": "BR1.2, BR1.5" },
+    { "id": "AC1.2.4", "status": "OK", "target": "BR1.4" },
+    { "id": "AC1.2.5", "status": "OK", "target": "BR1.6" },
+    { "id": "AC1.3.1", "status": "OK", "target": "BR2.1" },
+    { "id": "AC1.3.2", "status": "OK", "target": "BR2.1" },
+    { "id": "AC2.1.1", "status": "OK", "target": "BR3.1" },
+    { "id": "AC2.1.2", "status": "Deferred", "target": "u4-csv-import (取り込みの行の順。並びの規則は BR3.1)" },
+    { "id": "AC2.1.3", "status": "OK", "target": "BR3.2" },
+    { "id": "AC2.1.4", "status": "OK", "target": "BR3.5" }
+  ],
+  "reverse": [
+    { "id": "BR1.3", "status": "N/A", "target": "区分とカテゴリの規則の誤りの文。受け入れ条件 AC1.1.2・AC1.1.3 は U1 で確かめ済み" },
+    { "id": "BR4.1", "status": "N/A", "target": "契約レビュー R-11 の確認（U5 のサンプルが U2 の規則を通る）。対応する受け入れ条件はない" }
+  ]
+}

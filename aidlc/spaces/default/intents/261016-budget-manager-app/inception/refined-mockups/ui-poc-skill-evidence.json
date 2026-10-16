@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "arm": "C",
+  "stage": "refined-mockups",
+  "configSha256": "6952170119a76c575da2d67cc7cc40ad44b6f85c5e2cd50e4b621bd68f5e9986",
+  "note": "Context and facts hashes are not bound because the workflow scope is ui-poc-application, which the Arm C routing checker does not accept. The frontend-design entrypoints were read in this session at rough-mockups; their hashes are unchanged and re-recorded here.",
+  "events": [
+    {"type": "skill-read", "skill": "frontend-design", "entrypoint": ".agents/skills/frontend-design/SKILL.md", "sha256": "45cdb52056ecfddaa5082cefe873b764c8f7f5212f701b590636dd7e89be0e18"},
+    {"type": "skill-read", "skill": "frontend-design", "entrypoint": ".agents/skills/frontend-design/reference/color-and-contrast.md", "sha256": "be502ad08270cd60cabb6769a6e1ed517ecaeeb7d40f6e610f1802689ee78ddc"},
+    {"type": "skill-read", "skill": "frontend-design", "entrypoint": ".agents/skills/frontend-design/reference/interaction-design.md", "sha256": "7f545df683b1897460cdc8d94adfa1410c4c4a23fdb1545fbe95dc6e9af1b486"},
+    {"type": "skill-read", "skill": "frontend-design", "entrypoint": ".agents/skills/frontend-design/reference/motion-design.md", "sha256": "c35a59b5f795721c914cfccf9b470e89a5010c563cd85ab46a67031531678f3f"},
+    {"type": "skill-read", "skill": "frontend-design", "entrypoint": ".agents/skills/frontend-design/reference/responsive-design.md", "sha256": "5add44195a42cf7fa82aecadaad79b8875446b930e06d087d73f3722533fd95a"},
+    {"type": "skill-read", "skill": "frontend-design", "entrypoint": ".agents/skills/frontend-design/reference/spatial-design.md", "sha256": "10c743ee8245fc1be9e8af2b79dd08b0dae19fcde33d46c9730c000d7e13b7cd"},
+    {"type": "skill-read", "skill": "frontend-design", "entrypoint": ".agents/skills/frontend-design/reference/typography.md", "sha256": "f18de3de5eea28c88af1904b913dc245a15815330b70c4e2babcee93398d855b"},
+    {"type": "skill-read", "skill": "frontend-design", "entrypoint": ".agents/skills/frontend-design/reference/ux-writing.md", "sha256": "0cd5e958d92be6e2331cb199d6ed5d98597aa20ec4922d4c3df56e7753cfc00c"},
+    {"type": "skill-applied", "skill": "frontend-design", "note": "Refined variant A against approved requirements and stories; kept the creator-confirmed calm, light, low-motion direction; WCAG large-text correction applied.",
+      "inputs": [
+        {"name": "creator-confirmed-design-context-snapshot", "kind": "file", "path": "aidlc/spaces/default/intents/261016-budget-manager-app/ideation/rough-mockups/design-context.json", "sha256": "939c9a823f2ee966c3ddef41b143264ad1ba1587ce1f57a41487f5ef683ad4f0"},
+        {"name": "approved-requirements", "kind": "file", "path": "aidlc/spaces/default/intents/261016-budget-manager-app/inception/requirements-analysis/requirements.md", "sha256": "eb5f5f631a9f09619f09dd5f16b0d59c987e1e65f6d1181c7d1760333ef4fdf4"},
+        {"name": "stories-and-acceptance-criteria", "kind": "file", "path": "aidlc/spaces/default/intents/261016-budget-manager-app/inception/user-stories/stories.md", "sha256": "8f90bd68f54f44833b48a2ee318812a1349af783834fe3bef725039be6ac7cba"},
+        {"name": "rough-ui-evidence", "kind": "file", "path": "aidlc/spaces/default/intents/261016-budget-manager-app/ideation/rough-mockups/ui-poc-rough-contract.md", "sha256": "906975131810ee850b5c3fa7086510fe519d4549987ff248282c55ce6b81b555"}
+      ],
+      "outputs": [
+        {"name": "refined-html", "kind": "file", "path": "aidlc/spaces/default/intents/261016-budget-manager-app/inception/refined-mockups/assets/refined-mockup.html", "sha256": "bd4d3c3dbf0e78392818a531f8eb7c6af967df96cfdff67a3938babf71f4589f"},
+        {"name": "ui-poc-refined-contract", "kind": "value-note", "path": "aidlc/spaces/default/intents/261016-budget-manager-app/inception/refined-mockups/ui-poc-refined-contract.md"},
+        {"name": "accessibility-correction-report", "kind": "file", "path": "aidlc/spaces/default/intents/261016-budget-manager-app/inception/refined-mockups/wcag-correction-report.json", "sha256": "fe5aa5496e5d4c8b114a6f062c756de1e2bda515e56c45c14af67575403d2dfb"}
+      ]},
+    {"type": "skill-skipped", "skill": "prototype-ui", "condition": "unresolved_visual_alternatives", "reason": "No unresolved visual alternatives: the requester chose variant A at approval-handoff (Q1) and confirmed the remaining UI details in this stage (Q1-Q5)."}
+  ]
+}

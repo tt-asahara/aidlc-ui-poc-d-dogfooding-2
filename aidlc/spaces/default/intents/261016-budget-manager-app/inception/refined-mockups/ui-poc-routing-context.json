@@ -1,0 +1,9 @@
+{
+  "stage": "refined-mockups",
+  "scope": "ui-poc-application",
+  "recordId": "261016-budget-manager-app",
+  "attempt": 1,
+  "unit": null,
+  "engineStateSha256": "2097e2d094ab42d117d85241a352a7cb3e5402c82daec18802fba82fca461991",
+  "note": "Recorded honestly as the actual workflow scope (ui-poc-application). The Arm C routing checker only accepts ui-poc-comparison, so this context is expected to be rejected by that check, as at earlier stages."
+}

@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "pinnedSourcePreserved": true,
+  "sourceStatement": "18px+ or 14px bold",
+  "normalCssPx": 24,
+  "boldCssPx": 18.6667,
+  "normativeBasis": "WCAG 18pt or 14pt bold",
+  "appliedTo": "assets/refined-mockup.html",
+  "note": "The pinned frontend-design reference (color-and-contrast.md) states large text as '18px+ or 14px bold'. The refined mockup and accessibility-checklist.md apply the WCAG values instead: only text at 24px+ regular or 18.6667px+ bold may use the 3:1 large-text minimum; all other text targets 4.5:1. The pinned source file was not edited."
+}

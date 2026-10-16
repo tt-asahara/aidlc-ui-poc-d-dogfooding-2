@@ -63,6 +63,9 @@
 
 - **Construction Verification Command**: npm --prefix app run verify
 
+
+
+
 ## Phase Progress
 <!-- Status values: Pending, Active, Verified, Skipped -->
 
@@ -124,7 +127,9 @@ Per unit: [TBD]
 - **Current Stage**: functional-design
 - **Next Stage**: nfr-requirements
 - **Status**: Running
-- **Last Updated**: 2026-10-16T16:18:19Z
+- **Last Updated**: 2026-10-16T16:32:26Z
+
+- **Construction Autonomy Mode**: gated
 
 ## Session Resume Point
 - **Last Completed Stage**: delivery-planning

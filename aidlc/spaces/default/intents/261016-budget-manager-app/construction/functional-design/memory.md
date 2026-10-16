@@ -11,6 +11,7 @@
 
 ## Tradeoffs
 <!-- example: 2026-05-29T10:14:32Z — picked TDD over BDD this run; the team is unit-first and the domain is well-understood -->
+- 2026-10-17T04:20:00Z — U5 の同時保存の隙間（1 ミリ秒未満）は Web Locks で閉じず、残るリスクとして記録した; 保存の呼び出しを非同期にすると U1 の呼び出しと約束ごと C2 を変える必要があり、1人が手で操作する使い方では起きないため（依頼者の回答 Q1）。
 - 2026-10-17T01:10:00Z — U1 の「読めない」の判定は JSON として読めない・版が 1 でない、の2つだけにした; 詳しい検出は U5 の受け持ちで、U1 を小さく保つ代わりに、項目の欠けた保存データは U5 まで検出されない。
 
 ## Open questions

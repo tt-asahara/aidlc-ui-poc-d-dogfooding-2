@@ -1,6 +1,6 @@
 # ストーリーと Unit の対応
 
-ストーリーは `aidlc/spaces/default/intents/261016-budget-manager-app/inception/user-stories/stories.md`、Unit は `unit-of-work.md` にあります。部品の一覧は `aidlc/spaces/default/intents/261016-budget-manager-app/inception/domain-design/components.md` です。
+ストーリーは `aidlc/spaces/default/intents/261016-budget-manager-app/inception/user-stories/stories.md`、Unit は `unit-of-work.md` にあります。部品の一覧は `aidlc/spaces/default/intents/261016-budget-manager-app/inception/domain-design/components.md` です。作る順番は U1 → U5 → U2 → U3 → U4 → U6 です（`unit-of-work-dependency.md`）。
 
 ## 対応表
 
@@ -31,7 +31,7 @@
 |------------|-----------|-------------------|------|
 | US1.1 | U1 | U2 | U1 で登録と基本の知らせを作り、U2 で誤りの表示と二重送信の防止を足す |
 | US5.1 | U1 | U4 | U1 で基本の出力を作り、U4 で数式対策と、出力 → 取り込みの往復の確認を足す（ストーリーのレビュー指摘 R-01） |
-| US7.3 | U5 | U2, U3, U4 | 保存の失敗の表示を、登録・予算保存・取り込みのそれぞれの画面に出す。U5 が DataStore と状態の伝達を作り、各画面の表示は U5 でまとめて足す |
+| US7.3 | U5 | U1, U3, U4 | 保存の失敗の表示を、登録・予算保存・取り込みのそれぞれの画面に出す。U5 が DataStore と状態の伝達を先に作り、各画面の表示は、登録の画面は U1、予算保存・取り込みの画面は U3・U4 が作る（契約設計の Q4） |
 | US8.1 | U6 | U1〜U5 | 基本のアクセシビリティは各 Unit で作り込み、U6 で通しの確認と仕上げを行う |
 
 ## Unit の中での作る順番

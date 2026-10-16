@@ -1,6 +1,6 @@
 # 作業単位（Unit）の定義
 
-入力: 部品の一覧 `aidlc/spaces/default/intents/261016-budget-manager-app/inception/domain-design/components.md`、設計判断 `aidlc/spaces/default/intents/261016-budget-manager-app/inception/domain-design/decisions.md`、要件 `aidlc/spaces/default/intents/261016-budget-manager-app/inception/requirements-analysis/requirements.md`、ストーリー `aidlc/spaces/default/intents/261016-budget-manager-app/inception/user-stories/stories.md`、このステージの回答 `units-generation-questions.md`（Q1・Q2、分割の計画は承認済み）。
+入力: 部品の一覧 `aidlc/spaces/default/intents/261016-budget-manager-app/inception/domain-design/components.md`、設計判断 `aidlc/spaces/default/intents/261016-budget-manager-app/inception/domain-design/decisions.md`、要件 `aidlc/spaces/default/intents/261016-budget-manager-app/inception/requirements-analysis/requirements.md`、ストーリー `aidlc/spaces/default/intents/261016-budget-manager-app/inception/user-stories/stories.md`、このステージの回答 `units-generation-questions.md`（Q1〜Q3、分割の計画は承認済み。Q3 はデリバリー計画からの依存関係の見直し）。
 
 ## 一覧
 
@@ -15,6 +15,8 @@
 
 アプリは依頼者のパソコンで動かす1つの Web アプリで、Unit ごとに別々に配ることはしません（`team-practices.md` の Deployment）。種類はすべて ui（画面を持つ部分）です。
 
+作る順番は U1 → U5 → U2 → U3 → U4 → U6 です（デリバリー計画の決定。依存関係は `unit-of-work-dependency.md`）。U5 で保存の仕組みを先に固め、U2・U3・U4 はその上に自分の画面の失敗表示を作ります。
+
 ## U1 薄い版（u1-walking-skeleton）
 
 - **説明**: 端から端まで最小限につながって動く版です。収支を1件登録し、月次集計（収入・支出・差額）に反映し、明細を CSV ファイルに保存できます。ブラウザを開き直しても登録が残ります。
@@ -28,27 +30,28 @@
 - **説明**: 入力の誤りを欄ごとに示し、別の月の日付で登録したら表示をその月に切り替えます。月の明細を新しい順に一覧で表示します。
 - **含む部品**: EntryFormView（誤り表示・二重送信の防止・別の月への切り替え依頼）、Ledger（明細の規則の判定、並び順）、ReviewView（明細一覧と空の月の案内）、AppShell（表示月の切り替え）。
 - **受け持つこと**: 金額・日付・カテゴリ・メモの規則（要件 FR1、ストーリーの差分、詳細モックアップ Q3）、一覧の並び順と表示。
-- **注意点**: Ledger の「保存を伴わない規則の判定」は U4 の取り込みでも使うので、画面から独立した形で作る（ドメイン設計レビュー R-04）。
+- **注意点**: Ledger の「保存を伴わない規則の判定」は U4 の取り込みでも使うので、画面から独立した形で作る（ドメイン設計レビュー R-04）。登録の保存に失敗したときの表示は U1 で作る（契約設計の Q4）。この Unit は、U5 で固めた保存の結果と状態の上に、欄ごとの誤り表示と二重送信の防止を足す。
 
 ## U3 月別予算と予算比較（u3-budget）
 
 - **説明**: 月次集計の表に支出カテゴリごとの予算を入力して保存し、前の月の予算を写せます。集計に予算・実績・残額・超過・未設定を表示します。
 - **含む部品**: Budget、MonthlySummary（予算比較）、ReviewView（予算欄・保存・コピーと上書き確認）。
 - **受け持つこと**: 予算の規則（0〜9,999,999、空欄は未設定、1か月分まとめて検証）、前月コピー、超過と未設定の表示。
-- **注意点**: 「前の月」は、表示中の月を持つ AppShell から受け取る（ドメイン設計レビュー R-05）。
+- **注意点**: 「前の月」は、表示中の月を持つ AppShell から受け取る（ドメイン設計レビュー R-05）。予算の保存に失敗したときの表示と、保存データが読み込めないときに予算の保存を止める扱いは、U5 で固めた保存の結果と状態を使ってこの Unit で作る。
 
 ## U4 CSV の数式対策と取り込み（u4-csv-import）
 
 - **説明**: 数式のように見えるメモを安全に出力し、CSV ファイルを取り込んで明細に追加します。ファイル全体の確認、行ごとの検証、重複の確認、結果の表示を行います。
 - **含む部品**: CsvExchange（数式対策、取り込みの検証と重複確認）、ExportView（取り込み操作・重複の確認・結果の表示）、Ledger（一括追加・一致の判定）。
 - **受け持つこと**: 要件 FR6.4・FR7 とストーリーの差分、詳細モックアップ Q2・Q3 の規則。取り込みは全部か無か。
-- **注意点**: 取り込みファイルは信用しない入力として扱う（ADR-003）。重複確認の途中状態（検証済みの行）は CsvExchange が持ち、取り込みをやめたら捨てる。
+- **注意点**: 取り込みファイルは信用しない入力として扱う（ADR-003）。重複確認の途中状態（検証済みの行）は ExportView が持ち、取り込みをやめたら捨てる（契約設計の C7）。取り込みの保存に失敗したときの表示と、保存データが読み込めないときに取り込みを止める扱いは、U5 で固めた保存の結果と状態を使ってこの Unit で作る。
 
 ## U5 初回のサンプルデータと保存の異常・別タブ対応（u5-storage-resilience）
 
 - **説明**: 初めて開いたときに直近3か月分の架空データを入れます。保存に失敗したとき、保存データが壊れているとき、別のタブで変更があったときに知らせ、データを守ります。
-- **含む部品**: DataStore（版と通し番号、書き込み時の照合、壊れたデータの検出と書き込み停止、別タブの検知）、SampleDataSeeder、NoticeBannerView、AppShell（各画面への状態の伝達）、各画面部品（保存系の操作を止める）。
+- **含む部品**: DataStore（版と通し番号、書き込み時の照合、壊れたデータの検出と書き込み停止、別タブの検知）、SampleDataSeeder、NoticeBannerView、AppShell（各画面への状態の伝達）。各画面の失敗表示は、登録の画面は U1、予算・取り込みの画面はあとの U3・U4 が作る（契約設計の Q4）。この Unit は保存の仕組みの側に絞る。
 - **受け持つこと**: 要件 FR8・FR9、ストーリー US7.1・US7.3・US7.4。
+- **順番**: U1 のすぐあとに作る。U2・U3・U4 はこの Unit に依存する。
 - **注意点**: ドメイン設計レビューの指摘を、この Unit で解消する。
   - R-01: 古いタブからの書き込みは、通し番号の照合で断る。
   - R-02: 状態を画面部品に伝える。

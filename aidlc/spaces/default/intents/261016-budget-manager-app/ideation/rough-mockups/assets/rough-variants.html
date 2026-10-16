@@ -1,0 +1,272 @@
+<!doctype html>
+<!--
+  PROTOTYPE (rough mockup, throwaway). 予算管理アプリのラフ案3つを1ファイルで切り替えて比較する。
+  計画: 「登録フォームが最初に目に入る」構成違いの3案を、?variant=A|B|C と ?state=<状態> で切り替える。
+  読み取り専用: 保存・取り込みは行わず、ボタンは状態表示を切り替えるだけ。外部通信なし。データはすべて架空。
+-->
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ラフ案 — 架空データの予算管理</title>
+<style>
+  :root {
+    /* 落ち着き・安心: 深い藍緑を唯一のアクセントに、温かみを少し帯びた中間色 */
+    --ink: oklch(24% 0.02 220);
+    --ink-2: oklch(40% 0.02 220);
+    --paper: oklch(98.5% 0.006 85);
+    --paper-2: oklch(95.5% 0.008 85);
+    --line: oklch(80% 0.01 85);
+    --accent: oklch(42% 0.07 200);
+    --accent-soft: oklch(93% 0.025 200);
+    --warn: oklch(45% 0.12 40);
+    --warn-soft: oklch(94% 0.03 40);
+    --ok: oklch(42% 0.08 150);
+    --space-xs: 4px; --space-sm: 8px; --space-md: 16px; --space-lg: 24px; --space-xl: 48px;
+    --text-sm: 0.875rem; --text-base: 1rem; --text-lg: 1.25rem; --text-xl: 1.75rem;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 400 var(--text-base)/1.6 system-ui, -apple-system, "Hiragino Sans", "Yu Gothic UI", sans-serif; }
+  .num { font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+  a, button, input, select { font: inherit; color: inherit; }
+  button { cursor: pointer; border: 1px solid var(--ink-2); background: var(--paper); padding: var(--space-sm) var(--space-md); border-radius: 4px; min-height: 44px; }
+  button.primary { background: var(--accent); color: var(--paper); border-color: var(--accent); }
+  button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible, [tabindex]:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  .skip { position: absolute; left: -999px; }
+  .skip:focus { left: var(--space-md); top: var(--space-md); background: var(--paper); padding: var(--space-sm); z-index: 50; }
+  header.app { display: flex; align-items: baseline; gap: var(--space-lg); padding: var(--space-md) var(--space-lg); border-bottom: 1px solid var(--line); }
+  header.app h1 { font-size: var(--text-lg); margin: 0; }
+  header.app .note { font-size: var(--text-sm); color: var(--ink-2); }
+  h2 { font-size: var(--text-lg); margin: 0 0 var(--space-md); }
+  h3 { font-size: var(--text-base); margin: 0 0 var(--space-sm); }
+  label { display: block; font-size: var(--text-sm); font-weight: 600; margin-bottom: var(--space-xs); }
+  input, select { width: 100%; min-height: 44px; padding: var(--space-sm); border: 1px solid var(--ink-2); border-radius: 4px; background: var(--paper); }
+  .field { margin-bottom: var(--space-md); }
+  .field .err { color: var(--warn); font-size: var(--text-sm); margin-top: var(--space-xs); }
+  .field.invalid input, .field.invalid select { border: 2px solid var(--warn); }
+  .seg { display: flex; gap: 0; border: 1px solid var(--ink-2); border-radius: 4px; overflow: hidden; }
+  .seg label { flex: 1; margin: 0; padding: var(--space-sm); text-align: center; font-weight: 400; font-size: var(--text-base); cursor: pointer; }
+  .seg input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .seg input:checked + span { font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
+  .seg label:has(input:checked) { background: var(--accent-soft); }
+  .seg label:has(input:focus-visible) { outline: 3px solid var(--accent); outline-offset: -3px; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { padding: var(--space-sm); border-bottom: 1px solid var(--line); text-align: left; }
+  th { font-size: var(--text-sm); color: var(--ink-2); font-weight: 600; }
+  .notice { padding: var(--space-md); border-radius: 4px; margin-bottom: var(--space-md); }
+  .notice.ok { background: var(--accent-soft); border-left: 0; }
+  .notice.warn { background: var(--warn-soft); }
+  .notice strong { display: block; }
+  .over { color: var(--warn); font-weight: 700; }
+  .muted { color: var(--ink-2); }
+  .month-nav { display: flex; align-items: center; gap: var(--space-sm); }
+  .month-nav strong { font-size: var(--text-lg); }
+  .totals { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-md); margin-bottom: var(--space-lg); }
+  .totals div { border-top: 3px solid var(--line); padding-top: var(--space-sm); }
+  .totals .label { font-size: var(--text-sm); color: var(--ink-2); }
+  .totals .value { font-size: var(--text-xl); font-weight: 700; }
+  /* 案A: 縦積みのステップ順 */
+  .vA main { max-width: 760px; margin: 0 auto; padding: var(--space-lg); }
+  .vA section { padding: var(--space-lg) 0; border-bottom: 1px solid var(--line); }
+  .vA .step { font-size: var(--text-sm); color: var(--accent); font-weight: 700; letter-spacing: 0.05em; }
+  .vA .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 var(--space-md); }
+  /* 案B: タブ切替 */
+  .vB main { max-width: 1040px; margin: 0 auto; padding: var(--space-lg); }
+  .vB [role=tablist] { display: flex; gap: var(--space-xs); border-bottom: 2px solid var(--line); margin-bottom: var(--space-lg); }
+  .vB [role=tab] { border: 0; border-bottom: 3px solid transparent; border-radius: 0; background: none; padding: var(--space-sm) var(--space-lg); }
+  .vB [role=tab][aria-selected=true] { border-bottom-color: var(--accent); font-weight: 700; }
+  .vB .form-wide { max-width: 520px; }
+  /* 案C: 左に常設の入力、右に月のノート */
+  .vC .split { display: grid; grid-template-columns: 340px 1fr; min-height: calc(100vh - 60px); }
+  .vC aside { background: var(--paper-2); padding: var(--space-lg); border-right: 1px solid var(--line); }
+  .vC main { padding: var(--space-lg) var(--space-xl); }
+  .vC .ledger-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-md); }
+  .vC .csv { margin-top: var(--space-xl); padding-top: var(--space-md); border-top: 1px solid var(--line); }
+  /* プロトタイプ切替バー（評価対象のデザインではない） */
+  .proto-bar { position: fixed; left: 50%; bottom: var(--space-md); transform: translateX(-50%); display: flex; gap: var(--space-sm); align-items: center; background: oklch(22% 0.01 85); color: oklch(97% 0.005 85); padding: var(--space-sm) var(--space-md); border-radius: 999px; font-size: var(--text-sm); z-index: 40; }
+  .proto-bar button { background: transparent; color: inherit; border-color: oklch(70% 0.01 85); min-height: 36px; padding: 2px 12px; }
+  .proto-bar select { width: auto; min-height: 36px; background: oklch(30% 0.01 85); color: inherit; border-color: oklch(70% 0.01 85); }
+  .proto-bar label { display: inline; margin: 0; color: inherit; font-weight: 400; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">本文へ移動</a>
+<div id="app"></div>
+<div class="proto-bar" role="region" aria-label="ラフ案の切り替え（プロトタイプ用）">
+  <button type="button" id="prev" aria-label="前の案">←</button>
+  <span id="variant-label" aria-live="polite"></span>
+  <button type="button" id="next" aria-label="次の案">→</button>
+  <label for="state-select">状態</label>
+  <select id="state-select"></select>
+</div>
+<script>
+'use strict';
+// すべて架空のサンプルデータ（実在の口座・人物とは無関係）
+const CATEGORIES = { income: ['給与', '副収入', 'その他収入'], expense: ['食費', '住居費', '水道光熱費', '通信費', '日用品', '交通費', '娯楽', 'その他支出'] };
+const ENTRIES = [
+  { date: '2026-10-01', kind: '収入', cat: '給与', amount: 280000, memo: '10月分（架空）' },
+  { date: '2026-10-02', kind: '支出', cat: '住居費', amount: 82000, memo: '家賃（架空）' },
+  { date: '2026-10-05', kind: '支出', cat: '食費', amount: 6420, memo: 'スーパー' },
+  { date: '2026-10-08', kind: '支出', cat: '通信費', amount: 4980, memo: 'スマートフォン' },
+  { date: '2026-10-11', kind: '支出', cat: '食費', amount: 3150, memo: '外食' },
+  { date: '2026-10-12', kind: '支出', cat: '娯楽', amount: 12800, memo: '観劇' },
+  { date: '2026-10-14', kind: '支出', cat: '水道光熱費', amount: 9870, memo: '電気・ガス' }
+];
+const BUDGET = { '食費': 40000, '住居費': 82000, '水道光熱費': 12000, '通信費': 6000, '日用品': 5000, '交通費': 8000, '娯楽': 10000 };
+const STATES = {
+  'default': '通常（サンプルデータあり）',
+  'form-error': '登録: 入力に誤りがある',
+  'saved': '登録: 登録できた',
+  'month-empty': '集計: その月の明細がない',
+  'budget-unset': '集計: 予算が未設定',
+  'over-budget': '集計: 予算を超えたカテゴリがある',
+  'import-done': 'CSV: 取り込みできた',
+  'import-error': 'CSV: 一部の行を取り込めない',
+  'storage-error': '保存先に書き込めない'
+};
+const VARIANTS = { A: '縦積みのステップ順', B: 'タブ切替', C: '入力を常設した帳簿' };
+const yen = n => '¥' + n.toLocaleString('ja-JP');
+const params = new URLSearchParams(location.search);
+let variant = VARIANTS[params.get('variant')] ? params.get('variant') : 'A';
+let state = STATES[params.get('state')] ? params.get('state') : 'default';
+let tab = 'register';
+
+function monthEntries() { return state === 'month-empty' ? [] : ENTRIES; }
+function totals(list) {
+  const inc = list.filter(e => e.kind === '収入').reduce((s, e) => s + e.amount, 0);
+  const exp = list.filter(e => e.kind === '支出').reduce((s, e) => s + e.amount, 0);
+  return { inc, exp, diff: inc - exp };
+}
+function notices(scope) {
+  const out = [];
+  if (state === 'saved' && scope === 'form') out.push('<div class="notice ok" role="status"><strong>登録しました</strong>10月14日 食費 ¥1,280 を明細に追加しました。</div>');
+  if (state === 'storage-error') out.push('<div class="notice warn" role="alert"><strong>このブラウザに保存できませんでした</strong>入力した内容は画面に残っています。ブラウザの保存領域を確認してから、もう一度「登録する」を押してください。</div>');
+  if (state === 'import-done' && scope === 'csv') out.push('<div class="notice ok" role="status"><strong>12件の明細を追加しました</strong>既存の明細はそのまま残っています。</div>');
+  if (state === 'import-error' && scope === 'csv') out.push('<div class="notice warn" role="alert"><strong>10件を追加し、2件は取り込みませんでした</strong>3行目: 金額が数字ではありません。7行目: カテゴリ「ペット」は用意されていません。</div>');
+  return out.join('');
+}
+function form(idPrefix) {
+  const bad = state === 'form-error';
+  return `
+  <form aria-labelledby="${idPrefix}-h" onsubmit="return false">
+    <h2 id="${idPrefix}-h">収支を登録</h2>
+    ${notices('form')}
+    <div class="field"><span class="muted" id="${idPrefix}-kind-l">区分</span>
+      <div class="seg" role="radiogroup" aria-labelledby="${idPrefix}-kind-l">
+        <label><input type="radio" name="${idPrefix}-kind" checked><span>支出</span></label>
+        <label><input type="radio" name="${idPrefix}-kind"><span>収入</span></label>
+      </div></div>
+    <div class="form-grid">
+      <div class="field"><label for="${idPrefix}-date">日付</label><input id="${idPrefix}-date" type="date" value="2026-10-14"></div>
+      <div class="field ${bad ? 'invalid' : ''}"><label for="${idPrefix}-amt">金額（円）</label>
+        <input id="${idPrefix}-amt" inputmode="numeric" value="${bad ? '1,28o' : ''}" placeholder="例: 1280" ${bad ? `aria-invalid="true" aria-describedby="${idPrefix}-amt-e"` : ''}>
+        ${bad ? `<div class="err" id="${idPrefix}-amt-e">金額は1以上の整数で入力してください。例: 1280</div>` : ''}</div>
+    </div>
+    <div class="field"><label for="${idPrefix}-cat">カテゴリ</label><select id="${idPrefix}-cat">${CATEGORIES.expense.map(c => `<option>${c}</option>`).join('')}</select></div>
+    <div class="field"><label for="${idPrefix}-memo">メモ（任意）</label><input id="${idPrefix}-memo" placeholder="例: スーパー"></div>
+    <button class="primary" type="submit">登録する</button>
+  </form>`;
+}
+function list(caption) {
+  const rows = monthEntries();
+  if (!rows.length) return `<p class="muted">2026年10月の明細はまだありません。上のフォームから登録するか、CSV を取り込むと、ここに表示されます。</p>`;
+  return `<table><caption class="muted" style="text-align:left">${caption}</caption>
+    <thead><tr><th scope="col">日付</th><th scope="col">区分</th><th scope="col">カテゴリ</th><th scope="col" class="num">金額</th><th scope="col">メモ</th></tr></thead>
+    <tbody>${rows.slice().reverse().map(e => `<tr><td>${e.date.slice(5).replace('-', '/')}</td><td>${e.kind}</td><td>${e.cat}</td><td class="num">${e.kind === '支出' ? '−' : '+'}${yen(e.amount)}</td><td>${e.memo}</td></tr>`).join('')}</tbody></table>`;
+}
+function summary(idPrefix) {
+  const t = totals(monthEntries());
+  const spent = {};
+  monthEntries().filter(e => e.kind === '支出').forEach(e => { spent[e.cat] = (spent[e.cat] || 0) + e.amount; });
+  const budget = state === 'budget-unset' ? {} : BUDGET;
+  if (state === 'over-budget') spent['食費'] = 43900;
+  const cats = CATEGORIES.expense;
+  return `
+  <h2 id="${idPrefix}-sum">月次集計</h2>
+  <div class="month-nav"><button type="button" aria-label="前の月">‹</button><strong>2026年10月</strong><button type="button" aria-label="次の月">›</button></div>
+  <div class="totals" style="margin-top:16px">
+    <div><div class="label">収入</div><div class="value num" style="text-align:left">${yen(t.inc)}</div></div>
+    <div><div class="label">支出</div><div class="value num" style="text-align:left">${yen(t.exp)}</div></div>
+    <div><div class="label">差額</div><div class="value num" style="text-align:left">${t.diff < 0 ? '−' : ''}${yen(Math.abs(t.diff))}</div></div>
+  </div>
+  ${state === 'budget-unset' ? '<p class="notice warn"><strong>10月の予算はまだ設定されていません</strong>カテゴリごとの予算額を入れると、実績との比較と残額が表示されます。</p>' : ''}
+  <table aria-describedby="${idPrefix}-sum"><thead><tr><th scope="col">カテゴリ</th><th scope="col" class="num">予算</th><th scope="col" class="num">実績</th><th scope="col" class="num">残額</th></tr></thead>
+  <tbody>${cats.map(c => {
+    const b = budget[c], s = spent[c] || 0;
+    const rest = b === undefined ? null : b - s;
+    return `<tr><th scope="row" style="font-weight:400">${c}</th><td class="num">${b === undefined ? '<span class="muted">未設定</span>' : yen(b)}</td><td class="num">${yen(s)}</td><td class="num">${rest === null ? '<span class="muted">—</span>' : rest < 0 ? `<span class="over">超過 ${yen(-rest)}</span>` : yen(rest)}</td></tr>`;
+  }).join('')}</tbody></table>
+  <p><button type="button">10月の予算を設定</button></p>`;
+}
+function csv(idPrefix) {
+  return `
+  <h2 id="${idPrefix}-csv">CSV</h2>
+  ${notices('csv')}
+  <p class="muted">明細を CSV ファイルとして保存したり、CSV ファイルの明細を追加したりできます。取り込んだ明細は既存の明細に追加され、置き換えは行いません。</p>
+  <p style="display:flex;gap:8px;flex-wrap:wrap"><button type="button">明細を CSV に保存</button><button type="button">CSV を取り込んで追加</button></p>`;
+}
+function renderA() {
+  return `<div class="vA"><header class="app"><h1>予算管理</h1><span class="note">架空データで試す家計簿</span></header>
+  <main id="main">
+    <section><div class="step">1 登録</div>${form('a')}</section>
+    <section><div class="step">2 確認</div>${summary('a')}<h3 style="margin-top:24px">10月の明細</h3>${list('新しい順')}</section>
+    <section><div class="step">3 書き出し</div>${csv('a')}</section>
+  </main></div>`;
+}
+function renderB() {
+  const tabs = [['register', '登録'], ['list', '明細'], ['summary', '月次集計・予算'], ['csv', 'CSV']];
+  const body = { register: `<div class="form-wide">${form('b')}</div>`, list: `<h2>10月の明細</h2>${list('新しい順')}`, summary: summary('b'), csv: csv('b') }[tab];
+  return `<div class="vB"><header class="app"><h1>予算管理</h1><span class="note">架空データで試す家計簿</span></header>
+  <main id="main">
+    <div role="tablist" aria-label="画面の切り替え">${tabs.map(([k, l]) => `<button role="tab" type="button" id="tab-${k}" aria-controls="panel" aria-selected="${tab === k}" tabindex="${tab === k ? 0 : -1}" data-tab="${k}">${l}</button>`).join('')}</div>
+    <div role="tabpanel" id="panel" aria-labelledby="tab-${tab}" tabindex="0">${body}</div>
+  </main></div>`;
+}
+function renderC() {
+  return `<div class="vC"><header class="app"><h1>予算管理</h1><span class="note">架空データで試す家計簿</span></header>
+  <div class="split">
+    <aside aria-label="入力">${form('c')}<div class="csv">${csv('c')}</div></aside>
+    <main id="main">${summary('c')}<div class="ledger-head" style="margin-top:32px"><h3 style="margin:0">10月の明細</h3></div>${list('新しい順')}</main>
+  </div></div>`;
+}
+function render() {
+  document.getElementById('app').innerHTML = { A: renderA, B: renderB, C: renderC }[variant]();
+  document.getElementById('variant-label').textContent = `${variant}（${VARIANTS[variant]}）`;
+  document.title = `ラフ案${variant} — 架空データの予算管理`;
+  const sel = document.getElementById('state-select');
+  sel.innerHTML = Object.entries(STATES).map(([k, l]) => `<option value="${k}" ${k === state ? 'selected' : ''}>${l}</option>`).join('');
+  document.querySelectorAll('[role=tab]').forEach(t => t.addEventListener('click', () => { tab = t.dataset.tab; render(); document.getElementById('tab-' + tab).focus(); }));
+  const tl = document.querySelector('[role=tablist]');
+  if (tl) tl.addEventListener('keydown', ev => {
+    const keys = ['register', 'list', 'summary', 'csv'], i = keys.indexOf(tab);
+    if (ev.key === 'ArrowRight' || ev.key === 'ArrowLeft') { ev.preventDefault(); ev.stopPropagation(); tab = keys[(i + (ev.key === 'ArrowRight' ? 1 : keys.length - 1)) % keys.length]; render(); document.getElementById('tab-' + tab).focus(); }
+  });
+}
+function go(next) {
+  const keys = Object.keys(VARIANTS), i = keys.indexOf(variant);
+  variant = keys[(i + next + keys.length) % keys.length];
+  update();
+}
+function update() {
+  const p = new URLSearchParams(location.search);
+  p.set('variant', variant); p.set('state', state);
+  history.replaceState(null, '', '?' + p.toString());
+  if (state === 'month-empty' || state === 'budget-unset' || state === 'over-budget') tab = variant === 'B' ? 'summary' : tab;
+  if (state === 'import-done' || state === 'import-error') tab = variant === 'B' ? 'csv' : tab;
+  if (state === 'form-error' || state === 'saved') tab = variant === 'B' ? 'register' : tab;
+  render();
+}
+document.getElementById('prev').addEventListener('click', () => go(-1));
+document.getElementById('next').addEventListener('click', () => go(1));
+document.getElementById('state-select').addEventListener('change', ev => { state = ev.target.value; update(); });
+document.addEventListener('keydown', ev => {
+  const t = ev.target;
+  if (t.matches('input, textarea, select, [contenteditable], [role=tab]')) return;
+  if (ev.key === 'ArrowLeft') go(-1);
+  if (ev.key === 'ArrowRight') go(1);
+});
+update();
+</script>
+</body>
+</html>

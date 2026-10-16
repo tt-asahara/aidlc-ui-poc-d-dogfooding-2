@@ -1,0 +1,51 @@
+{
+  "schema": 1,
+  "arm": "C",
+  "stage": "rough-mockups",
+  "configSha256": "6952170119a76c575da2d67cc7cc40ad44b6f85c5e2cd50e4b621bd68f5e9986",
+  "note": "Context and facts hashes are not bound because the workflow scope is ui-poc-application, which the Arm C routing checker does not accept. Reads and applications below are what actually happened in this stage.",
+  "events": [
+    {"type": "skill-read", "skill": "teach-impeccable", "entrypoint": ".agents/skills/teach-impeccable/SKILL.md", "sha256": "5354f52de089b28a53d10643f549a6c68c3288a6e439c5634c3dea25fdbc4c59"},
+    {"type": "skill-applied", "skill": "teach-impeccable", "note": "Applied only through the AI-DLC questions file (Q1-Q6) and summary confirmation; no .impeccable.md or AGENTS.md was written.",
+      "inputs": [
+        {"name": "common-comparison-brief", "kind": "file", "path": "aidlc/spaces/default/intents/261016-budget-manager-app/ideation/scope-definition/scope-document.md", "sha256": "841919ca93e7f12d1dc8ed6c04785e511d256793bb9bf82d994e3c725d46fe9d"},
+        {"name": "known-design-context", "kind": "file", "path": "aidlc/spaces/default/intents/261016-budget-manager-app/ideation/intent-capture/intent-statement.md", "sha256": "7e9cfb38d20c6b3de726f22f7a98ab2aa0464af53d72fb94847421226d169b51"},
+        {"name": "unresolved-context-fields", "kind": "value", "value": ["device", "brandTone", "theme", "firstFocus", "accessibility", "antiReferences"]}
+      ],
+      "outputs": [
+        {"name": "creator-confirmed-design-context-snapshot", "kind": "file", "path": "aidlc/spaces/default/intents/261016-budget-manager-app/ideation/rough-mockups/design-context.json", "sha256": "939c9a823f2ee966c3ddef41b143264ad1ba1587ce1f57a41487f5ef683ad4f0"}
+      ]},
+    {"type": "skill-read", "skill": "prototype-ui", "entrypoint": ".agents/skills/prototype/SKILL.md", "sha256": "714de632d116bb73f65cdb5a882db15b9369a6713b9a47c0fad827848f0bfbe3"},
+    {"type": "skill-read", "skill": "prototype-ui", "entrypoint": ".agents/skills/prototype/UI.md", "sha256": "723211e878acbc7b6ff09755263f3295cde724ba902ff0064da41eed51d45ad3"},
+    {"type": "skill-applied", "skill": "prototype-ui", "note": "Bounded: three structurally different read-only variants on one self-contained page, switchable by ?variant= and a floating bar; no branch operations, no persistence.",
+      "inputs": [
+        {"name": "intent-statement", "kind": "file", "path": "aidlc/spaces/default/intents/261016-budget-manager-app/ideation/intent-capture/intent-statement.md", "sha256": "7e9cfb38d20c6b3de726f22f7a98ab2aa0464af53d72fb94847421226d169b51"},
+        {"name": "scope-document", "kind": "file", "path": "aidlc/spaces/default/intents/261016-budget-manager-app/ideation/scope-definition/scope-document.md", "sha256": "841919ca93e7f12d1dc8ed6c04785e511d256793bb9bf82d994e3c725d46fe9d"},
+        {"name": "intent-backlog", "kind": "file", "path": "aidlc/spaces/default/intents/261016-budget-manager-app/ideation/scope-definition/intent-backlog.md", "sha256": "a8f79addf8aed5f18be5b485a727ef5dc6fdcdd12bc18b426d500c943a2e1d30"},
+        {"name": "timebox", "kind": "value", "value": "single stage pass, low fidelity"}
+      ],
+      "outputs": [
+        {"name": "exploration-html", "kind": "file", "path": "aidlc/spaces/default/intents/261016-budget-manager-app/ideation/rough-mockups/assets/rough-variants.html", "sha256": "229f4b85154c88e601f6b8ce4ef4a908e424d6663195ae55d6721c3257f9a286"}
+      ]},
+    {"type": "skill-read", "skill": "frontend-design", "entrypoint": ".agents/skills/frontend-design/SKILL.md", "sha256": "45cdb52056ecfddaa5082cefe873b764c8f7f5212f701b590636dd7e89be0e18"},
+    {"type": "skill-read", "skill": "frontend-design", "entrypoint": ".agents/skills/frontend-design/reference/color-and-contrast.md", "sha256": "be502ad08270cd60cabb6769a6e1ed517ecaeeb7d40f6e610f1802689ee78ddc"},
+    {"type": "skill-read", "skill": "frontend-design", "entrypoint": ".agents/skills/frontend-design/reference/interaction-design.md", "sha256": "7f545df683b1897460cdc8d94adfa1410c4c4a23fdb1545fbe95dc6e9af1b486"},
+    {"type": "skill-read", "skill": "frontend-design", "entrypoint": ".agents/skills/frontend-design/reference/motion-design.md", "sha256": "c35a59b5f795721c914cfccf9b470e89a5010c563cd85ab46a67031531678f3f"},
+    {"type": "skill-read", "skill": "frontend-design", "entrypoint": ".agents/skills/frontend-design/reference/responsive-design.md", "sha256": "5add44195a42cf7fa82aecadaad79b8875446b930e06d087d73f3722533fd95a"},
+    {"type": "skill-read", "skill": "frontend-design", "entrypoint": ".agents/skills/frontend-design/reference/spatial-design.md", "sha256": "10c743ee8245fc1be9e8af2b79dd08b0dae19fcde33d46c9730c000d7e13b7cd"},
+    {"type": "skill-read", "skill": "frontend-design", "entrypoint": ".agents/skills/frontend-design/reference/typography.md", "sha256": "f18de3de5eea28c88af1904b913dc245a15815330b70c4e2babcee93398d855b"},
+    {"type": "skill-read", "skill": "frontend-design", "entrypoint": ".agents/skills/frontend-design/reference/ux-writing.md", "sha256": "0cd5e958d92be6e2331cb199d6ed5d98597aa20ec4922d4c3df56e7753cfc00c"},
+    {"type": "skill-applied", "skill": "frontend-design", "note": "Applied at rough fidelity: calm single-accent palette in OKLCH, tinted neutrals, system Japanese fonts, tabular numerals, no decorative motion; WCAG large-text correction applied.",
+      "inputs": [
+        {"name": "creator-confirmed-design-context-snapshot", "kind": "file", "path": "aidlc/spaces/default/intents/261016-budget-manager-app/ideation/rough-mockups/design-context.json", "sha256": "939c9a823f2ee966c3ddef41b143264ad1ba1587ce1f57a41487f5ef683ad4f0"},
+        {"name": "approved-common-brief", "kind": "file", "path": "aidlc/spaces/default/intents/261016-budget-manager-app/ideation/scope-definition/scope-document.md", "sha256": "841919ca93e7f12d1dc8ed6c04785e511d256793bb9bf82d994e3c725d46fe9d"},
+        {"name": "prototype-variants", "kind": "file", "path": "aidlc/spaces/default/intents/261016-budget-manager-app/ideation/rough-mockups/assets/rough-variants.html", "sha256": "229f4b85154c88e601f6b8ce4ef4a908e424d6663195ae55d6721c3257f9a286"}
+      ],
+      "outputs": [
+        {"name": "visual-direction-notes", "kind": "file", "path": "aidlc/spaces/default/intents/261016-budget-manager-app/ideation/rough-mockups/wireframes.md", "sha256": "ad46376d3ae53224031a7365aaf2e49f4efc3913f0d8bcb9384ecd4b031f4226"},
+        {"name": "exploration-html", "kind": "file", "path": "aidlc/spaces/default/intents/261016-budget-manager-app/ideation/rough-mockups/assets/rough-variants.html", "sha256": "229f4b85154c88e601f6b8ce4ef4a908e424d6663195ae55d6721c3257f9a286"},
+        {"name": "accessibility-correction-report", "kind": "file", "path": "aidlc/spaces/default/intents/261016-budget-manager-app/ideation/rough-mockups/wcag-correction-report.json", "sha256": "1e444a6a1ce1fa2aa2757d8dfc9d9fac42aaa0d381d3d5f0a6c5ce3e1fa530ae"}
+      ]},
+    {"type": "skill-skipped", "skill": "prototype-logic", "condition": "state_model_uncertainty", "reason": "The state model is simple and settled in scope definition (append-only entries, monthly budgets, append-only CSV import); no logic question needs a prototype."}
+  ]
+}

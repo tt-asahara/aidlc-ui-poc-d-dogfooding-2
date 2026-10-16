@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "creatorConfirmed": true,
+  "confirmation": "Consolidated Summary Confirmation answered 'Looks correct' by the requester in rough-mockups-questions.md (Q1-Q6).",
+  "source": {
+    "kind": "aidlc-questions",
+    "path": "aidlc/spaces/default/intents/261016-budget-manager-app/ideation/rough-mockups/rough-mockups-questions.md",
+    "sha256": "32c77b08a6380b1f7073a3febed901852f5bc7491a13fd4b2fb1d91507364a8c"
+  },
+  "commonBrief": {
+    "path": "aidlc/spaces/default/intents/261016-budget-manager-app/ideation/scope-definition/scope-document.md",
+    "sha256": "841919ca93e7f12d1dc8ed6c04785e511d256793bb9bf82d994e3c725d46fe9d"
+  },
+  "audience": "依頼者本人1人。個人の家計（収支と予算）の管理を、架空データだけで試す。主にパソコンのブラウザで使う。",
+  "useCases": "収支を登録する、月次集計（収入・支出・差額、カテゴリ別の予算・実績・残額）を確認する、明細を CSV に保存する・取り込んで追加する、月ごとのカテゴリ別予算を設定する。",
+  "brandTone": "落ち着いていて安心できる、堅実な家計簿らしさ。ライトテーマのみ。派手な色や動きは避ける。",
+  "accessibility": "WCAG 2.1 AA 相当（キーボード操作、文字と背景の明暗差、色だけで情報を伝えない）。",
+  "firstFocus": "最初に収支の登録フォームが目に入る。"
+}

@@ -1,0 +1,6 @@
+{
+  "schema": 1,
+  "producer": "aidlc-plugin-build",
+  "plugin": "pr-lens-review",
+  "harness": "claude"
+}

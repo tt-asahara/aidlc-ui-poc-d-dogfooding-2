@@ -264,9 +264,12 @@ pass/fail verdict, per-ID coverage, owning stage/Unit, target file, and every
 uncovered element. Any uncovered ID is a build-and-test finding that must be
 surfaced at the approval gate.
 
-### Step 11: Completion Handoff
+<!-- plugin:pr-lens-review:before-step:11:900:6eb036c0 -->
+### PR Lens evidence review
 
-Before the completion handoff, run the installed `.claude/skills/pr-lens-review/SKILL.md` workflow when application implementation exists. Its diagram and report supplement this stage's source, requirement, and test review; they never change sensor results, reviewer decisions, target verdicts, or approval state. A missing application diff is an explicit skipped/unavailable result, not a reason to diagram AI-DLC setup files. PR Lens validation/render failure must be reported as a limitation and must not be presented as review success.
+Run the installed `.claude/tools/pr-lens-review/SKILL.md` workflow when application implementation exists. Its diagram and report supplement this stage's source, requirement, and test review; they never change sensor results, reviewer decisions, target verdicts, or approval state. A missing application diff is an explicit skipped/unavailable result, not a reason to diagram AI-DLC setup files. PR Lens validation/render failure or diagram/source disagreement must be recorded as a limitation and must not be presented as review success.
+<!-- /plugin:pr-lens-review:before-step:11:900:6eb036c0 -->
+### Step 11: Completion Handoff
 
 Hand completion to `stage-protocol.md` via
 `bun .claude/tools/aidlc.ts engine orchestrate report --stage build-and-test --result <outcome>`.

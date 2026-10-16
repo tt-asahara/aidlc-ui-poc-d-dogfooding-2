@@ -1,0 +1,8 @@
+{
+  "name": "aidlc-pr-lens-review",
+  "version": "0.1.0",
+  "description": "Project-local evidence-backed PR Lens review",
+  "author": {
+    "name": "AIDLC"
+  }
+}

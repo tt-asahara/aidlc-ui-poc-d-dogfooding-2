@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "name": "pr-lens-review",
+  "files": [
+    {
+      "path": ".claude/tools/pr-lens-review.ts",
+      "sha256": "sha256:1ef5ea3aa48b7ccd24384c897994cbd58b50df4a86b1e60c2c5d0b09f0f04c47"
+    },
+    {
+      "path": ".claude/tools/pr-lens-review/SKILL.md",
+      "sha256": "sha256:148a7cda4477955abbe0591b43c9267f3c8adcbc8c1d4b97dfc305b8851423b4"
+    }
+  ]
+}

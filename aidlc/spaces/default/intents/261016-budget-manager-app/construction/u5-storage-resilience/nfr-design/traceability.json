@@ -1,0 +1,34 @@
+{
+  "stage": "nfr-design",
+  "unit": "u5-storage-resilience",
+  "upstream_ids": [
+    "NFR1.1", "NFR1.2", "NFR1.3", "NFR1.4",
+    "NFR2.1", "NFR2.2",
+    "NFR3.1", "NFR3.2",
+    "NFR4.1", "NFR4.2",
+    "NFR5.1", "NFR5.2", "NFR5.3", "NFR5.4",
+    "NFR6.1",
+    "NFR7.1", "NFR7.2",
+    "NFR8.1"
+  ],
+  "coverage": [
+    { "id": "NFR1.1", "status": "OK", "target": "performance-design.md: 1回の読み込みと検査で写しを入れ替え、2ページの Playwright で計測" },
+    { "id": "NFR1.2", "status": "OK", "target": "performance-design.md: 60 件以下のサンプルを1回で保存、空の保存領域からの計測" },
+    { "id": "NFR1.3", "status": "OK", "target": "performance-design.md: 1回たどる検査と Set による重なりの確認、3,000 件の計測" },
+    { "id": "NFR1.4", "status": "OK", "target": "performance-design.md: 3,000 件の大きさの計測と、上限をブラウザに任せる理由" },
+    { "id": "NFR2.1", "status": "OK", "target": "performance-design.md: 空の alert・status の領域、閉じるの名前と操作位置、優先順の単体テスト" },
+    { "id": "NFR2.2", "status": "OK", "target": "performance-design.md: 3つの状態の axe の検査" },
+    { "id": "NFR3.1", "status": "OK", "target": "security-design.md: 固定の一般名詞の一覧と単体テスト" },
+    { "id": "NFR3.2", "status": "OK", "target": "security-design.md: storage イベントだけ、connect-src 'none'、通信の記録" },
+    { "id": "NFR4.1", "status": "OK", "target": "security-design.md: validateSnapshot をすべての読み込みの経路で通す" },
+    { "id": "NFR4.2", "status": "OK", "target": "security-design.md: 理由の文は項目名と位置だけ" },
+    { "id": "NFR5.1", "status": "OK", "target": "security-design.md: initialize の1回の commit" },
+    { "id": "NFR5.2", "status": "OK", "target": "security-design.md: 読めない状態では commit と storage イベントを止める" },
+    { "id": "NFR5.3", "status": "OK", "target": "security-design.md: 残るリスクの記録と、照合・検知による防ぎ" },
+    { "id": "NFR5.4", "status": "OK", "target": "security-design.md: 後の投入が照合で断られる単体テスト" },
+    { "id": "NFR6.1", "status": "OK", "target": "performance-design.md: 3つのブラウザで2ページのテスト" },
+    { "id": "NFR7.1", "status": "OK", "target": "performance-design.md: 確認コマンドでカバレッジ 80%" },
+    { "id": "NFR7.2", "status": "OK", "target": "performance-design.md: U1 のテストを消さずに通す" },
+    { "id": "NFR8.1", "status": "OK", "target": "performance-design.md: 初回のサンプル表示のブラウザ操作のテスト" }
+  ]
+}

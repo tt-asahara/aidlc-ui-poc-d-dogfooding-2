@@ -24,3 +24,14 @@ aidlc/diagnostics/
 .claude/settings.local.json
 # END AI-DLC:gitignore
 .pr-lens/
+
+# Dependencies, build output, local secrets
+node_modules/
+coverage/
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.DS_Store
+*.log

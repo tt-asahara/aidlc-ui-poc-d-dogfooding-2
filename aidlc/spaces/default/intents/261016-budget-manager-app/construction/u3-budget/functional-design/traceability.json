@@ -1,0 +1,31 @@
+{
+  "stage": "functional-design",
+  "unit": "u3-budget",
+  "upstream_ids": [
+    "AC3.2.1", "AC3.2.2", "AC3.2.3", "AC3.2.4",
+    "AC4.1.1", "AC4.1.2", "AC4.1.3",
+    "AC4.2.1", "AC4.2.2", "AC4.2.3",
+    "AC7.3.1", "AC7.3.2", "AC7.3.3", "AC7.3.4"
+  ],
+  "coverage": [
+    { "id": "AC3.2.1", "status": "OK", "target": "BR2.1" },
+    { "id": "AC3.2.2", "status": "OK", "target": "BR2.2" },
+    { "id": "AC3.2.3", "status": "OK", "target": "BR2.3" },
+    { "id": "AC3.2.4", "status": "OK", "target": "BR1.3" },
+    { "id": "AC4.1.1", "status": "OK", "target": "BR1.2, BR5.3" },
+    { "id": "AC4.1.2", "status": "OK", "target": "BR1.1, BR1.2" },
+    { "id": "AC4.1.3", "status": "OK", "target": "BR1.1" },
+    { "id": "AC4.2.1", "status": "OK", "target": "BR3.1, BR3.4" },
+    { "id": "AC4.2.2", "status": "OK", "target": "BR3.3, BR3.4" },
+    { "id": "AC4.2.3", "status": "OK", "target": "BR3.2" },
+    { "id": "AC7.3.1", "status": "N/A", "target": "u1-walking-skeleton で実装済み（登録の保存失敗）" },
+    { "id": "AC7.3.2", "status": "OK", "target": "BR5.1 (予算の保存の失敗。取り込みの部分は u4-csv-import)" },
+    { "id": "AC7.3.3", "status": "OK", "target": "BR5.2 (予算の操作の停止。全体のお知らせ枠は u5-storage-resilience で実装済み)" },
+    { "id": "AC7.3.4", "status": "N/A", "target": "u5-storage-resilience で実装済み（壊れた保存データを残す）" }
+  ],
+  "reverse": [
+    { "id": "BR4.1", "status": "N/A", "target": "機能設計 Q2 で決めた未保存の入力の扱い。対応する受け入れ条件はない" },
+    { "id": "BR4.2", "status": "N/A", "target": "約束ごと C6 の未解決の点（確認待ちの状態の破棄と知らせ）。別タブの受け入れ条件 AC7.4.1 は U5 で確かめ済み" },
+    { "id": "BR4.3", "status": "N/A", "target": "機能設計レビュー R-01・R-02 で決めた、欄を作り直すきっかけ。対応する受け入れ条件はない" }
+  ]
+}

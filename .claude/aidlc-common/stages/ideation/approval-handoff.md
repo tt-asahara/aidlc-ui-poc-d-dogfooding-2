@@ -45,6 +45,7 @@ scopes:
   - enterprise
   - feature
   - ui-poc-comparison
+  - ui-poc-application
 inputs: All Ideation phase artifacts (intent, market research, feasibility, scope, team, mockups)
 outputs: initiative-brief.md, decision-log.md, approval-handoff-questions.md (under this stage's record dir, engine-resolved)
 ---

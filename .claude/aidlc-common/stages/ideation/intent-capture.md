@@ -29,6 +29,7 @@ scopes:
   - mvp
   - poc
   - ui-poc-comparison
+  - ui-poc-application
 inputs: Authoritative project description (project-description utility), scope selection
 outputs: intent-statement.md, stakeholder-map.md, intent-capture-questions.md (under this stage's record dir, engine-resolved)
 ---

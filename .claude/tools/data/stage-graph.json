@@ -25,7 +25,8 @@
       "classic",
       "workshop",
       "express",
-      "ui-poc-comparison"
+      "ui-poc-comparison",
+      "ui-poc-application"
     ],
     "inputs": "none (first stage after session start)",
     "outputs": "the per-intent record tree (one dir per in-scope phase + verification dir) and the space-level knowledge/ dir",
@@ -73,7 +74,8 @@
       "classic",
       "workshop",
       "express",
-      "ui-poc-comparison"
+      "ui-poc-comparison",
+      "ui-poc-application"
     ],
     "inputs": "none (scans filesystem)",
     "outputs": "workspace classification (greenfield/brownfield), technology stack detection",
@@ -121,7 +123,8 @@
       "classic",
       "workshop",
       "express",
-      "ui-poc-comparison"
+      "ui-poc-comparison",
+      "ui-poc-application"
     ],
     "inputs": "workspace classification from workspace-detection, scope from orchestrator",
     "outputs": "<record>/aidlc-state.md (full populated version, engine-resolved)",
@@ -170,7 +173,8 @@
       "feature",
       "mvp",
       "poc",
-      "ui-poc-comparison"
+      "ui-poc-comparison",
+      "ui-poc-application"
     ],
     "reviewer": "aidlc-product-lead-agent",
     "review_artifact": "intent-statement",
@@ -430,7 +434,8 @@
       "enterprise",
       "feature",
       "mvp",
-      "ui-poc-comparison"
+      "ui-poc-comparison",
+      "ui-poc-application"
     ],
     "summary_confirmation": "required",
     "inputs": "Intent statement, feasibility assessment, constraint register",
@@ -512,7 +517,8 @@
     "scopes": [
       "enterprise",
       "feature",
-      "ui-poc-comparison"
+      "ui-poc-comparison",
+      "ui-poc-application"
     ],
     "summary_confirmation": "required",
     "inputs": "Scope definition, intent backlog, feasibility assessment",
@@ -599,7 +605,8 @@
       "enterprise",
       "feature",
       "mvp",
-      "ui-poc-comparison"
+      "ui-poc-comparison",
+      "ui-poc-application"
     ],
     "reviewer": "aidlc-product-lead-agent",
     "review_artifact": "wireframes",
@@ -721,7 +728,8 @@
     "scopes": [
       "enterprise",
       "feature",
-      "ui-poc-comparison"
+      "ui-poc-comparison",
+      "ui-poc-application"
     ],
     "summary_confirmation": "required",
     "inputs": "All Ideation phase artifacts (intent, market research, feasibility, scope, team, mockups)",
@@ -805,7 +813,8 @@
       "classic",
       "workshop",
       "express",
-      "ui-poc-comparison"
+      "ui-poc-comparison",
+      "ui-poc-application"
     ],
     "inputs": "<record>/aidlc-state.md",
     "outputs": "aidlc/spaces/<active-space>/codekb/<repo>/ (9 artifacts: business-overview.md, architecture.md, code-structure.md, api-documentation.md, component-inventory.md, technology-stack.md, dependencies.md, code-quality-assessment.md, reverse-engineering-timestamp.md)",
@@ -913,7 +922,8 @@
       "infra",
       "classic",
       "workshop",
-      "ui-poc-comparison"
+      "ui-poc-comparison",
+      "ui-poc-application"
     ],
     "summary_confirmation": "required",
     "inputs": "<record>/aidlc-state.md + (brownfield) reverse-engineering evidence",
@@ -1023,7 +1033,8 @@
       "classic",
       "workshop",
       "express",
-      "ui-poc-comparison"
+      "ui-poc-comparison",
+      "ui-poc-application"
     ],
     "reviewer": "aidlc-product-lead-agent",
     "review_artifact": "requirements",
@@ -1130,7 +1141,8 @@
       "mvp",
       "classic",
       "workshop",
-      "ui-poc-comparison"
+      "ui-poc-comparison",
+      "ui-poc-application"
     ],
     "reviewer": "aidlc-product-lead-agent",
     "review_artifact": "stories",
@@ -1244,7 +1256,8 @@
       "mvp",
       "classic",
       "workshop",
-      "ui-poc-comparison"
+      "ui-poc-comparison",
+      "ui-poc-application"
     ],
     "reviewer": "aidlc-product-lead-agent",
     "review_artifact": "mockups",
@@ -1355,7 +1368,8 @@
       "mvp",
       "classic",
       "workshop",
-      "ui-poc-comparison"
+      "ui-poc-comparison",
+      "ui-poc-application"
     ],
     "reviewer": "aidlc-architecture-reviewer-agent",
     "review_artifact": "components",
@@ -1466,7 +1480,8 @@
       "mvp",
       "classic",
       "workshop",
-      "ui-poc-comparison"
+      "ui-poc-comparison",
+      "ui-poc-application"
     ],
     "reviewer": "aidlc-architecture-reviewer-agent",
     "review_artifact": "unit-of-work",
@@ -1566,7 +1581,8 @@
       "mvp",
       "classic",
       "workshop",
-      "ui-poc-comparison"
+      "ui-poc-comparison",
+      "ui-poc-application"
     ],
     "reviewer": "aidlc-architecture-reviewer-agent",
     "review_artifact": "contract-summary",
@@ -1682,7 +1698,8 @@
       "mvp",
       "classic",
       "workshop",
-      "ui-poc-comparison"
+      "ui-poc-comparison",
+      "ui-poc-application"
     ],
     "summary_confirmation": "required",
     "inputs": "All Inception artifacts (requirements, stories, mockups, architecture, units)",
@@ -1817,7 +1834,8 @@
       "refactor",
       "classic",
       "workshop",
-      "ui-poc-comparison"
+      "ui-poc-comparison",
+      "ui-poc-application"
     ],
     "reviewer": "aidlc-architecture-reviewer-agent",
     "review_artifact": "functional-spec",
@@ -1968,7 +1986,8 @@
       "security-patch",
       "classic",
       "workshop",
-      "ui-poc-comparison"
+      "ui-poc-comparison",
+      "ui-poc-application"
     ],
     "reviewer": "aidlc-architecture-reviewer-agent",
     "review_artifact": "security-requirements",
@@ -2132,7 +2151,8 @@
       "infra",
       "classic",
       "workshop",
-      "ui-poc-comparison"
+      "ui-poc-comparison",
+      "ui-poc-application"
     ],
     "reviewer": "aidlc-architecture-reviewer-agent",
     "review_artifact": "security-design",
@@ -2302,7 +2322,8 @@
       "infra",
       "classic",
       "workshop",
-      "ui-poc-comparison"
+      "ui-poc-comparison",
+      "ui-poc-application"
     ],
     "reviewer": "aidlc-architecture-reviewer-agent",
     "review_artifact": "cicd-pipeline",
@@ -2456,7 +2477,8 @@
       "classic",
       "workshop",
       "express",
-      "ui-poc-comparison"
+      "ui-poc-comparison",
+      "ui-poc-application"
     ],
     "reviewer": "aidlc-architecture-reviewer-agent",
     "review_artifact": "code-generation-plan",
@@ -2568,7 +2590,8 @@
       "classic",
       "workshop",
       "express",
-      "ui-poc-comparison"
+      "ui-poc-comparison",
+      "ui-poc-application"
     ],
     "inputs": "ALL code generation outputs across all units",
     "outputs": "build-instructions.md, integration-test-instructions.md, performance-test-instructions.md, security-test-instructions.md, build-and-test-summary.md, test-results.md, cross-unit-traceability.md (under this stage's record dir, engine-resolved)",

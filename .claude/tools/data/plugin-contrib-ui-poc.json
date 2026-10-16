@@ -1,14 +1,4 @@
 {
-  "reverse-engineering": {
-    "scopes": [
-      "ui-poc-comparison"
-    ]
-  },
-  "practices-discovery": {
-    "scopes": [
-      "ui-poc-comparison"
-    ]
-  },
   "refined-mockups": {
     "produces": [
       "ui-poc-refined-contract"
@@ -22,25 +12,12 @@
         "required": true
       }
     ],
-    "scopes": [
-      "ui-poc-comparison"
-    ],
     "fragments": [
       {
         "anchor": "before-step:4",
         "order": 100,
         "hash": "cd4268c8"
       }
-    ]
-  },
-  "user-stories": {
-    "scopes": [
-      "ui-poc-comparison"
-    ]
-  },
-  "contract-design": {
-    "scopes": [
-      "ui-poc-comparison"
     ]
   },
   "requirements-analysis": {
@@ -53,9 +30,6 @@
         "required": true
       }
     ],
-    "scopes": [
-      "ui-poc-comparison"
-    ],
     "fragments": [
       {
         "anchor": "after-step:1",
@@ -64,17 +38,9 @@
       }
     ]
   },
-  "delivery-planning": {
-    "scopes": [
-      "ui-poc-comparison"
-    ]
-  },
   "domain-design": {
     "sensors": [
       "ui-poc-evidence"
-    ],
-    "scopes": [
-      "ui-poc-comparison"
     ],
     "fragments": [
       {
@@ -84,11 +50,6 @@
       }
     ]
   },
-  "units-generation": {
-    "scopes": [
-      "ui-poc-comparison"
-    ]
-  },
   "rough-mockups": {
     "produces": [
       "ui-poc-rough-contract"
@@ -96,50 +57,12 @@
     "sensors": [
       "ui-poc-evidence"
     ],
-    "scopes": [
-      "ui-poc-comparison"
-    ],
     "fragments": [
       {
         "anchor": "before-step:4",
         "order": 100,
         "hash": "ea432144"
       }
-    ]
-  },
-  "scope-definition": {
-    "scopes": [
-      "ui-poc-comparison"
-    ]
-  },
-  "intent-capture": {
-    "scopes": [
-      "ui-poc-comparison"
-    ]
-  },
-  "approval-handoff": {
-    "scopes": [
-      "ui-poc-comparison"
-    ]
-  },
-  "team-formation": {
-    "scopes": [
-      "ui-poc-comparison"
-    ]
-  },
-  "workspace-detection": {
-    "scopes": [
-      "ui-poc-comparison"
-    ]
-  },
-  "workspace-scaffold": {
-    "scopes": [
-      "ui-poc-comparison"
-    ]
-  },
-  "state-init": {
-    "scopes": [
-      "ui-poc-comparison"
     ]
   },
   "build-and-test": {
@@ -155,25 +78,12 @@
         "required": true
       }
     ],
-    "scopes": [
-      "ui-poc-comparison"
-    ],
     "fragments": [
       {
         "anchor": "after-step:1",
         "order": 100,
         "hash": "9369cfcd"
       }
-    ]
-  },
-  "infrastructure-design": {
-    "scopes": [
-      "ui-poc-comparison"
-    ]
-  },
-  "nfr-requirements": {
-    "scopes": [
-      "ui-poc-comparison"
     ]
   },
   "functional-design": {
@@ -183,20 +93,12 @@
         "required": true
       }
     ],
-    "scopes": [
-      "ui-poc-comparison"
-    ],
     "fragments": [
       {
         "anchor": "after-step:1",
         "order": 100,
         "hash": "eac0d14f"
       }
-    ]
-  },
-  "nfr-design": {
-    "scopes": [
-      "ui-poc-comparison"
     ]
   },
   "code-generation": {
@@ -211,9 +113,6 @@
         "artifact": "ui-poc-refined-contract",
         "required": true
       }
-    ],
-    "scopes": [
-      "ui-poc-comparison"
     ],
     "fragments": [
       {

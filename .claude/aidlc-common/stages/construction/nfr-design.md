@@ -61,6 +61,7 @@ scopes:
   - classic
   - workshop
   - ui-poc-comparison
+  - ui-poc-application
 inputs: NFR requirements artifacts, functional design artifacts
 outputs: "performance-design.md, security-design.md, scalability-design.md, reliability-design.md, observability-design.md, logical-components.md, traceability.json (under this stage's per-unit record dir, engine-resolved); per-kind applicability via produces_kinds (untagged unit: all)"
 ---

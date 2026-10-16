@@ -59,6 +59,7 @@ scopes:
   - classic
   - workshop
   - ui-poc-comparison
+  - ui-poc-application
 inputs: NFR design artifacts, domain design components.md, functional design
 outputs: "infrastructure-specification.md (deployment + services + shared, tabular), monitoring-design.md (tabular), cicd-pipeline.md, traceability.json (under this stage's per-unit record dir, engine-resolved); per-kind applicability via produces_kinds (a spec unit owes none)"
 ---

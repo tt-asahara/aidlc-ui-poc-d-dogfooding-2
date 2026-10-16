@@ -30,6 +30,7 @@ scopes:
   - feature
   - mvp
   - ui-poc-comparison
+  - ui-poc-application
 inputs: Intent statement, feasibility assessment, constraint register
 outputs: scope-document.md, intent-backlog.md, scope-definition-questions.md (under this stage's record dir, engine-resolved)
 ---

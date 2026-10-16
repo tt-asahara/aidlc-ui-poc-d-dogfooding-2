@@ -3,6 +3,10 @@
   "name": "ui-poc",
   "files": [
     {
+      "path": ".claude/scopes/ui-poc-application.md",
+      "sha256": "sha256:1c8428834d9ebf7504b118dbef71883dee63c0c1387c70d1eb2823490b3a8c9c"
+    },
+    {
       "path": ".claude/scopes/ui-poc-comparison.md",
       "sha256": "sha256:d1be6d36590b4e76e7b230788894c3778d80a3fa52382ab3ecafe8bb95758962"
     },

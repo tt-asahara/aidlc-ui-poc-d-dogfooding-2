@@ -36,6 +36,7 @@ scopes:
   - feature
   - mvp
   - ui-poc-comparison
+  - ui-poc-application
 inputs: Intent statement, scope definition, intent backlog
 outputs: wireframes.md, user-flow.md, rough-mockups-questions.md (under this stage's record dir, engine-resolved)
 ---

@@ -1,0 +1,3 @@
+[submodule ".vendor/pr-lens"]
+	path = .vendor/pr-lens
+	url = https://github.com/coldteadotai/pr-lens.git

@@ -24,6 +24,7 @@ scopes:
   - workshop
   - express
   - ui-poc-comparison
+  - ui-poc-application
 inputs: none (scans filesystem)
 outputs: workspace classification (greenfield/brownfield), technology stack detection
 ---

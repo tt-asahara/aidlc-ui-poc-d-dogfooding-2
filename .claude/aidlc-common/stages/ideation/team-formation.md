@@ -28,6 +28,7 @@ scopes:
   - enterprise
   - feature
   - ui-poc-comparison
+  - ui-poc-application
 inputs: Scope definition, intent backlog, feasibility assessment
 outputs: team-assessment.md, skill-matrix.md, mob-composition.md, team-formation-questions.md (under this stage's record dir, engine-resolved)
 ---

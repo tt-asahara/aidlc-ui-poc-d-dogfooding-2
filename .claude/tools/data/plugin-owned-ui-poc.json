@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "name": "ui-poc",
+  "files": [
+    {
+      "path": ".claude/scopes/ui-poc-comparison.md",
+      "sha256": "sha256:d1be6d36590b4e76e7b230788894c3778d80a3fa52382ab3ecafe8bb95758962"
+    },
+    {
+      "path": ".claude/sensors/aidlc-ui-poc-evidence.md",
+      "sha256": "sha256:e9d7d43fd9dfadad4d17a7ab01c3ff87287949c3eafb05fb6515ee0e7cd34c22"
+    },
+    {
+      "path": ".claude/tools/aidlc-sensor-ui-poc-evidence.ts",
+      "sha256": "sha256:01c9a7a8c9c3f371226d6d39a35fb64b5698a48eb1760c342a55e33561bafcd1"
+    },
+    {
+      "path": ".claude/tools/ui-poc-c-routing.cjs",
+      "sha256": "sha256:b6c9c8656c74cc53c80dddc7040edfacc5d21e5d5543fbb1cecd0d3a8f92b8d4"
+    },
+    {
+      "path": ".claude/tools/ui-poc-evidence.cjs",
+      "sha256": "sha256:1342f36667a327b0a83aaf654011622af3f048db2089f04cafe77cf0a7a63bfc"
+    },
+    {
+      "path": ".claude/tools/ui-poc/c-stage-routing.json",
+      "sha256": "sha256:6952170119a76c575da2d67cc7cc40ad44b6f85c5e2cd50e4b621bd68f5e9986"
+    },
+    {
+      "path": ".claude/tools/ui-poc/contract.md",
+      "sha256": "sha256:0840d155879753cc3c10f74524ffa7fe3af51524e7f6307ce3b4484d70f7d3c0"
+    },
+    {
+      "path": ".claude/tools/ui-poc/treatments/a.json",
+      "sha256": "sha256:cf2b8680a50685d231ee765e4ec000949f0dbf74cb898240713055e2a9cb9d04"
+    },
+    {
+      "path": ".claude/tools/ui-poc/treatments/b.json",
+      "sha256": "sha256:f02a37f29e5ca92dac655c26e1be170593d64ae96e086403e388c4a742ccf793"
+    },
+    {
+      "path": ".claude/tools/ui-poc/treatments/c.json",
+      "sha256": "sha256:11dd11142f69f72254f9b3ff8fa259d565fb8abefbf56def483211cbf02e7477"
+    },
+    {
+      "path": ".claude/tools/ui-poc/treatments/source-lock.json",
+      "sha256": "sha256:216669e8b530650c66150392119087c2b09dd554b00c3f397d05f25a3dd43d5b"
+    }
+  ]
+}

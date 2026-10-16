@@ -61,6 +61,8 @@
 
 
 
+- **Construction Verification Command**: npm --prefix app run verify
+
 ## Phase Progress
 <!-- Status values: Pending, Active, Verified, Skipped -->
 

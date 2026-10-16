@@ -1,0 +1,67 @@
+# 予算管理アプリ（app/）の自動の確認（インフラ設計 cicd-pipeline.md）。
+# 配る先がないため、配置（CD）はない。Playwright のテストはここでは動かさず、手元の npm run verify で動かす。
+name: app-ci
+
+on:
+  push:
+    branches:
+      - feat/budget-manager-app
+      - 'feat/**'
+    paths:
+      - 'app/**'
+      - '.github/workflows/app-ci.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'app/**'
+      - '.github/workflows/app-ci.yml'
+
+# 同じブランチで新しい push があったら、前の実行を取り消す。
+concurrency:
+  group: app-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+# 秘密情報は使わない。リポジトリの読み取りの権限だけにする。
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: 整形・リンター・型・単体テスト・ビルド・ビルド出力の検査
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - name: リポジトリを取得する
+        uses: actions/checkout@v4
+
+      - name: app/.nvmrc の版で Node.js を用意する
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: app/.nvmrc
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+
+      - name: 部品を取得する（package-lock.json の版）
+        run: npm ci
+
+      - name: 整形の確認（Prettier）
+        run: npm run format:check
+
+      - name: リンター（ESLint）
+        run: npm run lint
+
+      - name: 型の検査（tsc）
+        run: npm run typecheck
+
+      - name: 単体テストとカバレッジ（行カバレッジ 80% 未満で失敗）
+        run: npm run coverage
+
+      - name: ビルド（Vite）
+        run: npm run build
+
+      - name: 'ビルドの出力の検査（CSP・外部と data: の読み込み先）'
+        run: npm run check:dist

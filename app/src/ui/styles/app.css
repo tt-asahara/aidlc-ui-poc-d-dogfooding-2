@@ -1,0 +1,357 @@
+/*
+  予算管理の見た目（詳細モックアップ 案A・design-system-mapping.md）。
+  CSP の style-src 'self' を守るため、見た目の指定はこのファイルだけに置き、style 属性は使わない。
+  文字と余白は rem で指定し、ブラウザの文字サイズ設定と拡大に従う（NFR6.3）。
+*/
+
+:root {
+  --ink: oklch(24% 0.02 220);
+  --ink-2: oklch(40% 0.02 220);
+  --paper: oklch(98.5% 0.006 85);
+  --paper-2: oklch(95.5% 0.008 85);
+  --line: oklch(80% 0.01 85);
+  --accent: oklch(42% 0.07 200);
+  --accent-soft: oklch(93% 0.025 200);
+  --warn: oklch(45% 0.12 40);
+  --warn-soft: oklch(94% 0.03 40);
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 3rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.75rem;
+  --radius: 0.25rem;
+  --content-width: 53.75rem;
+  --control-height: 2.75rem;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font:
+    400 var(--text-base) / 1.6 system-ui,
+    -apple-system,
+    'Hiragino Sans',
+    'Yu Gothic UI',
+    sans-serif;
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  white-space: nowrap;
+}
+
+button,
+input,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: 1px solid var(--ink-2);
+  background: var(--paper);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius);
+  min-height: var(--control-height);
+}
+
+button.primary {
+  background: var(--accent);
+  color: var(--paper);
+  border-color: var(--accent);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+:is(button, input, select, a, [tabindex]):focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.skip {
+  position: absolute;
+  left: -999rem;
+  top: var(--space-sm);
+  background: var(--paper);
+  color: var(--ink);
+  padding: var(--space-sm);
+  z-index: 50;
+}
+
+.skip:focus {
+  left: var(--space-md);
+}
+
+header.app {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-xs) var(--space-lg);
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 1px solid var(--line);
+  max-width: var(--content-width);
+  margin: 0 auto;
+}
+
+header.app h1 {
+  font-size: var(--text-lg);
+  margin: 0;
+}
+
+header.app p {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--ink-2);
+}
+
+main {
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: 0 var(--space-lg) var(--space-xl);
+}
+
+section.step,
+div.step {
+  padding: var(--space-lg) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.step-label {
+  font-size: var(--text-sm);
+  color: var(--accent);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  margin: 0 0 var(--space-xs);
+}
+
+h2 {
+  font-size: var(--text-lg);
+  margin: 0 0 var(--space-md);
+}
+
+label {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  margin-bottom: var(--space-xs);
+}
+
+input,
+select {
+  width: 100%;
+  min-height: var(--control-height);
+  padding: var(--space-sm);
+  border: 1px solid var(--ink-2);
+  border-radius: var(--radius);
+  background: var(--paper);
+}
+
+input[aria-invalid='true'],
+select[aria-invalid='true'] {
+  border: 2px solid var(--warn);
+}
+
+::placeholder {
+  color: var(--ink-2);
+  opacity: 1;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 var(--space-md);
+}
+
+.field {
+  margin-bottom: var(--space-md);
+}
+
+.hint {
+  font-size: var(--text-sm);
+  color: var(--ink-2);
+  margin: var(--space-xs) 0 0;
+}
+
+fieldset {
+  border: 0;
+  margin: 0 0 var(--space-md);
+  padding: 0;
+  min-width: 0;
+}
+
+legend {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  margin-bottom: var(--space-xs);
+  padding: 0;
+}
+
+.seg {
+  display: inline-flex;
+  border: 1px solid var(--ink-2);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.seg label {
+  position: relative;
+  margin: 0;
+  padding: var(--space-sm) var(--space-lg);
+  font-weight: 400;
+  font-size: var(--text-base);
+  cursor: pointer;
+  min-height: var(--control-height);
+  display: flex;
+  align-items: center;
+}
+
+.seg input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  min-height: 0;
+  margin: 0;
+}
+
+.seg label:has(input:checked) {
+  background: var(--accent-soft);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.seg label:has(input:focus-visible) {
+  outline: 3px solid var(--accent);
+  outline-offset: -3px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+caption {
+  text-align: left;
+  font-size: var(--text-sm);
+  color: var(--ink-2);
+  padding-bottom: var(--space-xs);
+}
+
+th,
+td {
+  padding: var(--space-sm);
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: middle;
+}
+
+th.num,
+td.num {
+  text-align: right;
+}
+
+thead th {
+  font-size: var(--text-sm);
+  color: var(--ink-2);
+  font-weight: 600;
+}
+
+tbody th {
+  font-weight: 400;
+}
+
+.notice {
+  padding: var(--space-md);
+  border-radius: var(--radius);
+  margin: 0 0 var(--space-md);
+}
+
+.notice strong {
+  display: block;
+}
+
+.notice.ok {
+  background: var(--accent-soft);
+}
+
+.notice.warn {
+  background: var(--warn-soft);
+}
+
+.month-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.month-nav strong {
+  font-size: var(--text-lg);
+  min-width: 8em;
+  text-align: center;
+}
+
+.totals {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.totals > div {
+  border-top: 3px solid var(--line);
+  padding-top: var(--space-sm);
+}
+
+.totals .label {
+  font-size: var(--text-sm);
+  color: var(--ink-2);
+}
+
+.totals .value {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  text-align: left;
+}
+
+.muted {
+  color: var(--ink-2);
+}
+
+.row-actions {
+  display: flex;
+  gap: var(--space-sm);
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: var(--space-md);
+}
+
+/* 768〜1023px では2列の部分（日付と金額、収入・支出・差額）を1列にする（NFR6.2）。 */
+@media (max-width: 1023px) {
+  .grid-2,
+  .totals {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}

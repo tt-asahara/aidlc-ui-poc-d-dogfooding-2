@@ -1,0 +1,15 @@
+{
+  "$comment": "ビルドしたページに入れる Content-Security-Policy（security-design.md の指定）。vite.config.ts と scripts/check-dist.mjs の両方がこのファイルを読む。",
+  "directives": [
+    "default-src 'none'",
+    "script-src 'self'",
+    "style-src 'self'",
+    "img-src 'self'",
+    "font-src 'self'",
+    "connect-src 'none'",
+    "form-action 'none'",
+    "base-uri 'none'",
+    "object-src 'none'",
+    "frame-src 'none'"
+  ]
+}

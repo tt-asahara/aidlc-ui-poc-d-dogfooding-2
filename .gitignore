@@ -35,3 +35,9 @@ coverage/
 *.key
 .DS_Store
 *.log
+
+# Budget manager app (app/): build output and test reports
+app/dist/
+app/test-results/
+app/playwright-report/
+app/coverage/

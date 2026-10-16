@@ -1,0 +1,34 @@
+{
+  "stage": "infrastructure-design",
+  "unit": "u5-storage-resilience",
+  "upstream_ids": [
+    "NFR1.1", "NFR1.2", "NFR1.3", "NFR1.4",
+    "NFR2.1", "NFR2.2",
+    "NFR3.1", "NFR3.2",
+    "NFR4.1", "NFR4.2",
+    "NFR5.1", "NFR5.2", "NFR5.3", "NFR5.4",
+    "NFR6.1",
+    "NFR7.1", "NFR7.2",
+    "NFR8.1"
+  ],
+  "coverage": [
+    { "id": "NFR1.1", "status": "OK", "target": "monitoring-design.md: 2ページの Playwright（Chromium）の計測、cicd-pipeline.md の手元の確認" },
+    { "id": "NFR1.2", "status": "OK", "target": "monitoring-design.md: 初回のサンプル表示の計測" },
+    { "id": "NFR1.3", "status": "OK", "target": "monitoring-design.md: Vitest の計測、cicd-pipeline.md の単体テストの段階" },
+    { "id": "NFR1.4", "status": "OK", "target": "infrastructure-specification.md: 大きさの目安とブラウザの上限" },
+    { "id": "NFR2.1", "status": "N/A", "target": "画面部品の実装で決まり、構成は要らない" },
+    { "id": "NFR2.2", "status": "OK", "target": "cicd-pipeline.md: 手元の確認の axe のテスト" },
+    { "id": "NFR3.1", "status": "N/A", "target": "サンプルの組み立ての実装で決まり、構成は要らない" },
+    { "id": "NFR3.2", "status": "OK", "target": "infrastructure-specification.md: storage イベントだけで通信なし、monitoring-design.md の外部通信 0 件" },
+    { "id": "NFR4.1", "status": "N/A", "target": "検査の関数の実装で決まり、構成は要らない" },
+    { "id": "NFR4.2", "status": "OK", "target": "monitoring-design.md: 記録には項目の名前と位置だけを出す" },
+    { "id": "NFR5.1", "status": "N/A", "target": "DataStore の保存の手順で決まり、構成は要らない" },
+    { "id": "NFR5.2", "status": "OK", "target": "infrastructure-specification.md: 壊れた保存データは書き換えない、monitoring-design.md の SLO" },
+    { "id": "NFR5.3", "status": "N/A", "target": "残るリスクの記録。構成は要らない" },
+    { "id": "NFR5.4", "status": "N/A", "target": "通し番号の照合の実装で決まり、構成は要らない" },
+    { "id": "NFR6.1", "status": "OK", "target": "infrastructure-specification.md: テスト用の配信の中で2ページを開く" },
+    { "id": "NFR7.1", "status": "OK", "target": "cicd-pipeline.md: GitHub Actions の単体テストとカバレッジ 80%" },
+    { "id": "NFR7.2", "status": "OK", "target": "cicd-pipeline.md: 承認済みの確認コマンドで U1 のテストも通す" },
+    { "id": "NFR8.1", "status": "OK", "target": "cicd-pipeline.md: 初回のサンプルのブラウザ操作のテスト" }
+  ]
+}

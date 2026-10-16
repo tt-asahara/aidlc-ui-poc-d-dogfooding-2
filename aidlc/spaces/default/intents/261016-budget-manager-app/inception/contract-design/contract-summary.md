@@ -7,6 +7,7 @@
 - 部品の一覧: `aidlc/spaces/default/intents/261016-budget-manager-app/inception/domain-design/components.md`
 - 要件: `aidlc/spaces/default/intents/261016-budget-manager-app/inception/requirements-analysis/requirements.md`
 - このステージの回答: `contract-design-questions.md`（Q1〜Q4、まとめの確認済み）
+- 作る順番: U1 → U5 → U2 → U3 → U4 → U6（U2・U3・U4 は U5 に依存する。デリバリー計画の決定に合わせて Unit の依存関係を見直した）。U5 が U1 のすぐあとに C2・C6 の保存の仕組みを固め、U2〜U4 はその上に作る。約束ごとの形は、この見直しでは変えていない。
 
 Unit はすべて1つの Web アプリの中で動くので、約束ごとはアプリ内の部品の呼び出し方とデータの形（TypeScript の型）です。外部に公開する API はありません（要件 NFR3）。外部とのやり取りは、利用者が選ぶ CSV ファイルだけです（C8）。
 
@@ -53,7 +54,7 @@ AppError:
       message: string
 ```
 
-画面の部品は `code` ごとに表示を決めます。失敗の表示は、その画面を持つ Unit が作ります（Q4）。登録は U1・U2、予算保存は U3、取り込みは U4 が担当します。
+画面の部品は `code` ごとに表示を決めます。失敗の表示は、その画面を持つ Unit が作ります（Q4）。登録の保存失敗は U1、予算保存は U3、取り込みは U4 が担当します。U2 が登録の画面に足すのは、欄ごとの誤り表示（`VALIDATION` の `fieldErrors`）と二重送信の防止だけです。
 
 ## C2 保存データの形と DataStore
 

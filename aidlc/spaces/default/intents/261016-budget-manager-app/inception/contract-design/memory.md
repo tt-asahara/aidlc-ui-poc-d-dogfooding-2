@@ -4,6 +4,7 @@
 ## Interpretations
 <!-- example: 2026-05-29T10:14:32Z — chose REST over GraphQL; the consuming team only needs CRUD, revisit if subscriptions land -->
 - 2026-10-16T15:30:00Z — 全 Unit が1つの Web アプリ内で動くため、約束ごとは REST や非同期メッセージではなく、アプリ内の型と関数呼び出し（共有スキーマ）として書いた; 外部とのやり取りは CSV ファイルだけなので、それを外部の約束ごと C8 とした。
+- 2026-10-17T00:20:00Z — Unit の依存関係の見直し（U2・U3・U4 が U5 に依存）に合わせ、作る順番を前提に足し、登録の失敗表示の担当を U1、U2 は欄ごとの誤りと二重送信の防止だけと明記した; 作業単位の分割のレビュー R-07 の表記ずれを解消するため。約束ごとの形は変えていない。
 
 ## Deviations
 <!-- example: 2026-05-29T10:14:32Z — skipped the optional caching layer the stage prose suggested; the dataset is small enough that it adds risk -->

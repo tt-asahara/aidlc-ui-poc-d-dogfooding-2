@@ -1,0 +1,31 @@
+{
+  "stage": "infrastructure-design",
+  "unit": "u2-entry-and-ledger",
+  "upstream_ids": [
+    "NFR1.1", "NFR1.2", "NFR1.3",
+    "NFR2.1", "NFR2.2", "NFR2.3",
+    "NFR3.1",
+    "NFR4.1", "NFR4.2",
+    "NFR5.1", "NFR5.2", "NFR5.3",
+    "NFR6.1", "NFR6.2",
+    "NFR7.1", "NFR7.2"
+  ],
+  "coverage": [
+    { "id": "NFR1.1", "status": "OK", "target": "monitoring-design.md: 登録から一覧の更新の計測、cicd-pipeline.md の一覧のテスト" },
+    { "id": "NFR1.2", "status": "OK", "target": "monitoring-design.md: 月の切り替えの計測" },
+    { "id": "NFR1.3", "status": "OK", "target": "monitoring-design.md: 二重送信の明細の数、cicd-pipeline.md の二重送信のテスト" },
+    { "id": "NFR2.1", "status": "N/A", "target": "画面部品の実装で決まり、構成は要らない" },
+    { "id": "NFR2.2", "status": "OK", "target": "cicd-pipeline.md: 4つの状態の axe" },
+    { "id": "NFR2.3", "status": "N/A", "target": "画面部品の実装で決まり、構成は要らない" },
+    { "id": "NFR3.1", "status": "OK", "target": "infrastructure-specification.md: 127.0.0.1 だけ、外への通信なし" },
+    { "id": "NFR4.1", "status": "N/A", "target": "画面部品の実装で決まり、構成は要らない" },
+    { "id": "NFR4.2", "status": "N/A", "target": "Ledger.validate の実装で決まり、構成は要らない" },
+    { "id": "NFR5.1", "status": "N/A", "target": "textRules の実装で決まり、構成は要らない" },
+    { "id": "NFR5.2", "status": "OK", "target": "cicd-pipeline.md: 単体テストの段階" },
+    { "id": "NFR5.3", "status": "N/A", "target": "送信の鍵の実装で決まり、構成は要らない" },
+    { "id": "NFR6.1", "status": "OK", "target": "cicd-pipeline.md: メモ欄の3ブラウザのテスト、infrastructure-specification.md の Intl.Segmenter" },
+    { "id": "NFR6.2", "status": "OK", "target": "monitoring-design.md: 日本語入力の手での確認と記録" },
+    { "id": "NFR7.1", "status": "OK", "target": "cicd-pipeline.md: GitHub Actions の単体テストとカバレッジ 80%" },
+    { "id": "NFR7.2", "status": "OK", "target": "cicd-pipeline.md: 承認済みの確認コマンドで U1・U5 のテストも通す" }
+  ]
+}

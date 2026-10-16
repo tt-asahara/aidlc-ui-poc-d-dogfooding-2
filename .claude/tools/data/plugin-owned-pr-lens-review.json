@@ -4,11 +4,11 @@
   "files": [
     {
       "path": ".claude/tools/pr-lens-review.ts",
-      "sha256": "sha256:e92aa9106872448e59f484d22beca62ace789af7ccf146c942cd9a8c5c0e6265"
+      "sha256": "sha256:d9d06d0bde9c42e5e3a0fa0c3058b594f04e61c38a9e842b1ef699b4284e4053"
     },
     {
       "path": ".claude/tools/pr-lens-review/SKILL.md",
-      "sha256": "sha256:aee3255bceea2ed5d6325e721def05fe5c0bc147f32efb38afcaa3a8ebb69570"
+      "sha256": "sha256:fd90504090897942b458fdec006a3b854dd1731debedd209b2620a303eee82b9"
     }
   ]
 }

@@ -1,1 +1,1 @@
-{"name":"pr-lens-review","version":"0.1.1","description":"Project-local evidence-backed PR Lens review","dependencies":["core"],"aidlc":{"contributes":{"overlays":"contributions/","tools":"tools/"}}}
+{"name":"pr-lens-review","version":"0.1.2","description":"Project-local evidence-backed PR Lens review","dependencies":["core"],"aidlc":{"contributes":{"overlays":"contributions/","tools":"tools/"}}}

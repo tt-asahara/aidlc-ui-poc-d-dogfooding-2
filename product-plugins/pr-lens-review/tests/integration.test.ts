@@ -31,6 +31,7 @@ describe("project-local PR Lens review", () => {
 
   test("report verification binds context, paths, graph, manifest, tests, and detects later source mutation", () => {
     const root = repo(); const base = spawnSync("git", ["rev-parse", "HEAD"], { cwd: root, encoding: "utf8" }).stdout.trim(); writeFileSync(join(root, "app.ts"), "export const x = 1;\n");
+    const evidenceDir = join(root, "aidlc", "spaces", "default", "intents", "budget", "inception", "requirements-analysis"); mkdirSync(evidenceDir, { recursive: true }); const requirements = join(evidenceDir, "requirements.md"); writeFileSync(requirements, "requirements v1\n");
     expect(run(root, ["prepare", "--base", base]).status).toBe(0); const contextPath = join(root, ".pr-lens", "review-context.json"); const context = JSON.parse(readFileSync(contextPath, "utf8"));
     const graphPath = join(root, ".pr-lens", "graph.json"); const manifestPath = join(root, ".pr-lens", "manifest.json"); const testPath = join(root, ".pr-lens", "tests.txt");
     writeFileSync(graphPath, JSON.stringify({ provenance: { base: { sha: context.base }, head: { sha: context.head } } })); writeFileSync(manifestPath, "{}\n"); writeFileSync(testPath, "1 passed\n");
@@ -38,6 +39,10 @@ describe("project-local PR Lens review", () => {
     const metadataPath = join(root, ".pr-lens", "review.json"); writeFileSync(metadataPath, JSON.stringify({ schemaVersion: 1, prLensSha: "7a9115c8202da4db030be5954ada8862e6135dce", context: { path: ".pr-lens/review-context.json", sha256: hash(contextPath), preparedWorktreeHash: context.preparedWorktreeHash }, reviewedPaths: ["app.ts"], graph: { path: ".pr-lens/graph.json", sha256: hash(graphPath) }, renderManifest: { path: ".pr-lens/manifest.json", sha256: hash(manifestPath) }, testEvidence: [{ path: ".pr-lens/tests.txt", sha256: hash(testPath) }], semanticCrossCheck: { performedBy: "ai-reviewer", disclaimer: "semantic source/requirements/test comparison is an AI judgment, not a machine guarantee" } }));
     const verify = () => run(root, ["verify-report", "--context", ".pr-lens/review-context.json", "--report", ".pr-lens/review.md", "--metadata", ".pr-lens/review.json"]).status;
     expect(verify()).toBe(0);
+    const reviewOutput = join(root, "aidlc", "spaces", "default", "intents", "budget", "construction", "build-and-test"); mkdirSync(reviewOutput, { recursive: true }); writeFileSync(join(reviewOutput, "pr-lens-review.md"), "mutable output\n"); writeFileSync(join(reviewOutput, "pr-lens-review.json"), "{}\n"); expect(verify()).toBe(0);
+    writeFileSync(requirements, "requirements v2\n"); expect(verify()).not.toBe(0); writeFileSync(requirements, "requirements v1\n");
+    const extraEvidence = join(evidenceDir, "stories.md"); writeFileSync(extraEvidence, "new evidence\n"); expect(verify()).not.toBe(0); rmSync(extraEvidence);
+    rmSync(requirements); expect(verify()).not.toBe(0); writeFileSync(requirements, "requirements v1\n");
     writeFileSync(join(root, "late.ts"), "export const late = true;\n"); expect(verify()).not.toBe(0); rmSync(join(root, "late.ts"));
     rmSync(join(root, "app.ts")); expect(verify()).not.toBe(0); writeFileSync(join(root, "app.ts"), "export const x = 1;\n");
     writeFileSync(join(root, "renamed.ts"), readFileSync(join(root, "app.ts"))); rmSync(join(root, "app.ts")); expect(verify()).not.toBe(0); rmSync(join(root, "renamed.ts")); writeFileSync(join(root, "app.ts"), "export const x = 1;\n");

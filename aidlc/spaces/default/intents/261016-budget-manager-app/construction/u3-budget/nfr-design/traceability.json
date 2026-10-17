@@ -1,0 +1,29 @@
+{
+  "stage": "nfr-design",
+  "unit": "u3-budget",
+  "upstream_ids": [
+    "NFR1.1", "NFR1.2",
+    "NFR2.1", "NFR2.2", "NFR2.3",
+    "NFR3.1",
+    "NFR4.1",
+    "NFR5.1", "NFR5.2", "NFR5.3", "NFR5.4",
+    "NFR6.1",
+    "NFR7.1", "NFR7.2"
+  ],
+  "coverage": [
+    { "id": "NFR1.1", "status": "OK", "target": "performance-design.md: 1回の commit と表示中の月だけの取り出し、Chromium の計測" },
+    { "id": "NFR1.2", "status": "OK", "target": "performance-design.md: コピーの1回の commit と計測" },
+    { "id": "NFR2.1", "status": "OK", "target": "performance-design.md: 予算欄の label、誤りの id と aria の結び付き、超過の文字" },
+    { "id": "NFR2.2", "status": "OK", "target": "performance-design.md: 確認の枠の focus と Escape" },
+    { "id": "NFR2.3", "status": "OK", "target": "performance-design.md: 5つの状態の axe" },
+    { "id": "NFR3.1", "status": "OK", "target": "security-design.md: CSP と外部通信のテストを変えずに通す" },
+    { "id": "NFR4.1", "status": "OK", "target": "security-design.md: 予算の規則は Budget の1か所" },
+    { "id": "NFR5.1", "status": "OK", "target": "security-design.md: budgetsToReplace の1回の commit と単体テスト" },
+    { "id": "NFR5.2", "status": "OK", "target": "security-design.md と performance-design.md: 失敗で入力を残す、externalChangeSeq と1回だけ無視する印" },
+    { "id": "NFR5.3", "status": "OK", "target": "security-design.md: 保存後の validateSnapshot のテスト" },
+    { "id": "NFR5.4", "status": "OK", "target": "security-design.md: 再読み込みで予算が残る Playwright のテスト" },
+    { "id": "NFR6.1", "status": "OK", "target": "performance-design.md: 3ブラウザで保存・コピー・確認の枠" },
+    { "id": "NFR7.1", "status": "OK", "target": "performance-design.md: 確認コマンドでカバレッジ 80%" },
+    { "id": "NFR7.2", "status": "OK", "target": "performance-design.md: U1 のテストの扱いと組み立ての既定" }
+  ]
+}

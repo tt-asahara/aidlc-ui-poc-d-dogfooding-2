@@ -26,7 +26,8 @@ test.describe('U1 薄い版: 保存できないとき・保存データが読め
     await expect(page.getByTestId('entry-form-alert')).toHaveAttribute('role', 'alert');
     await expect(page.getByText(/登録しました/)).toHaveCount(0);
     await expect(page.getByLabel('金額（円）')).toHaveValue('1280');
-    await expect(page.getByLabel('カテゴリ')).toHaveValue('食費');
+    // U3 の予算の表の名前と区別するため、名前の完全一致で選ぶ（確かめる内容は変えない）。
+    await expect(page.getByLabel('カテゴリ', { exact: true })).toHaveValue('食費');
     await expect(page.getByLabel('メモ（任意）')).toHaveValue('スーパー');
     await expect(totals(page).expense).toHaveText('¥0');
     expect(await readRawStore(page)).toBeNull();
@@ -56,7 +57,7 @@ test.describe('U1 薄い版: 保存できないとき・保存データが読め
 
     // 入力しても保存されず、開き直しても壊れた保存データはそのまま残る。
     await page.getByLabel('金額（円）').fill('1280');
-    await page.getByLabel('カテゴリ').selectOption('食費');
+    await page.getByLabel('カテゴリ', { exact: true }).selectOption('食費');
     await submit.click({ force: true });
     expect(await readRawStore(page)).toBe(broken);
     await page.reload();

@@ -111,6 +111,11 @@ export interface AppState {
   readonly selectedMonth: string;
   readonly storeStatus: StoreStatus;
   readonly lastExternalChangeAt: string | null;
+  /**
+   * 別のタブの変更（externalChange）を受け取るたびに 1 ずつ増える番号。最初は 0（U3 NFR 設計 R-06・R-07）。
+   * 時刻ではなく番号で、予算欄の作り直しと「1回だけ無視する印」を判断する。
+   */
+  readonly externalChangeSeq: number;
   /** 起動時に保存領域が使えたか（U5 BR3.1）。偽なら全体のお知らせ枠に BR5.3 を出す。 */
   readonly storageAvailable: boolean;
 }

@@ -48,7 +48,8 @@ test.describe('U1 薄い版: 外部への通信をしない', () => {
 
     await register(page, { amount: '1280', category: '食費', memo: 'スーパー' });
     await expect(page.getByTestId('review-expense')).toHaveText('¥1,280');
-    await page.getByRole('button', { name: '前の月' }).click();
+    // U3 で「前の月の予算をコピー」が加わったため、名前の完全一致で選ぶ（確かめる内容は変えない）。
+    await page.getByRole('button', { name: '前の月', exact: true }).click();
     await page.getByRole('button', { name: '次の月' }).click();
     const downloadPromise = page.waitForEvent('download');
     await page.getByRole('button', { name: '明細を CSV に保存' }).click();

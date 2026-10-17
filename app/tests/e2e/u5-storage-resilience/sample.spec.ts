@@ -20,11 +20,13 @@ test.describe('U5: 初回のサンプル', () => {
     await expectNoBannerNotice(page);
     expect(await storedEntryCount(page)).toBe(54);
 
-    await page.getByRole('button', { name: '前の月' }).click();
+    // U3 で「前の月の予算をコピー」が加わったため、名前の完全一致で選ぶ（確かめる内容は変えない）。
+    const previous = page.getByRole('button', { name: '前の月', exact: true });
+    await previous.click();
     await expect(page.getByTestId('review-month-label')).toHaveText('2026年9月');
     await expect(income).toHaveText('¥312,000');
     await expect(expense).toHaveText('¥169,480');
-    await page.getByRole('button', { name: '前の月' }).click();
+    await previous.click();
     await expect(expense).toHaveText('¥156,780');
 
     const savedBefore = await readRawStore(page);

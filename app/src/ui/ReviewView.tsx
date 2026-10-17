@@ -1,9 +1,11 @@
 import { useMemo } from 'react';
+import type { Budget } from '../domain/budget';
 import { formatMonthLabel, formatYen } from '../domain/format';
 import type { Ledger } from '../domain/ledger';
 import { nextMonth, previousMonth } from '../domain/month';
 import type { MonthlySummary } from '../domain/monthlySummary';
-import type { StoreStatus } from '../domain/types';
+import type { MonthSummary, StoreStatus } from '../domain/types';
+import { BudgetTable } from './BudgetTable';
 import { LedgerList } from './LedgerList';
 
 export interface ReviewViewProps {
@@ -16,6 +18,50 @@ export interface ReviewViewProps {
   /** 保存の知らせ（committed・externalChange）を受けるたびに増える番号。集計を読み直す合図。 */
   readonly dataVersion: number;
   readonly onSelectMonth: (month: string) => void;
+  /**
+   * 月別予算（U3）。渡されたときは、支出カテゴリ別の表を予算の入力ができる BudgetTable に置き換える。
+   * 省略したときは U1 の表示（予算は表示だけ）のまま。AppShell は必ず渡す（NFR 設計レビュー R-01）。
+   */
+  readonly budget?: Pick<Budget, 'saveMonth' | 'previewCopy' | 'copyFromPrevious'>;
+  /** 別のタブの変更の番号（AppState.externalChangeSeq）。省略時は 0。 */
+  readonly externalChangeSeq?: number;
+}
+
+/** U1 の支出カテゴリ別の表（予算は表示だけ）。budget を渡さないときに使う。 */
+function CategoryTable({ result }: { result: MonthSummary }) {
+  return (
+    <table data-testid="review-category-table">
+      <caption>支出カテゴリ別の予算と実績</caption>
+      <thead>
+        <tr>
+          <th scope="col">カテゴリ</th>
+          <th scope="col" className="num">
+            予算（円）
+          </th>
+          <th scope="col" className="num">
+            実績
+          </th>
+          <th scope="col" className="num">
+            残額
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {result.categories.map((row) => (
+          <tr key={row.category}>
+            <th scope="row">{row.category}</th>
+            <td className="num">
+              {row.budget === null ? <span className="muted">未設定</span> : formatYen(row.budget)}
+            </td>
+            <td className="num">{formatYen(row.actual)}</td>
+            <td className="num">
+              {row.remaining === null ? <span className="muted">—</span> : formatYen(row.remaining)}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
 }
 
 /**
@@ -29,6 +75,8 @@ export function ReviewView({
   storeStatus,
   dataVersion,
   onSelectMonth,
+  budget,
+  externalChangeSeq = 0,
 }: ReviewViewProps) {
   const unreadable = storeStatus === 'unreadable';
   // 表示中の月と保存データが変わったときだけ計算し直す（performance-design.md）。
@@ -92,46 +140,18 @@ export function ReviewView({
               </div>
             </div>
           </div>
-          <table data-testid="review-category-table">
-            <caption>支出カテゴリ別の予算と実績</caption>
-            <thead>
-              <tr>
-                <th scope="col">カテゴリ</th>
-                <th scope="col" className="num">
-                  予算（円）
-                </th>
-                <th scope="col" className="num">
-                  実績
-                </th>
-                <th scope="col" className="num">
-                  残額
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {result.categories.map((row) => (
-                <tr key={row.category}>
-                  <th scope="row">{row.category}</th>
-                  <td className="num">
-                    {row.budget === null ? (
-                      <span className="muted">未設定</span>
-                    ) : (
-                      formatYen(row.budget)
-                    )}
-                  </td>
-                  <td className="num">{formatYen(row.actual)}</td>
-                  <td className="num">
-                    {row.remaining === null ? (
-                      <span className="muted">—</span>
-                    ) : (
-                      formatYen(row.remaining)
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          {/* 予算の保存とコピーの置き場所（U3）。 */}
+          {budget ? (
+            // 予算の入力・保存・コピー（U3）。保存データが読めないときは、ここに来ない（BR5.2）。
+            <BudgetTable
+              budget={budget}
+              month={month}
+              summary={result}
+              storeStatus={storeStatus}
+              externalChangeSeq={externalChangeSeq}
+            />
+          ) : (
+            <CategoryTable result={result} />
+          )}
         </>
       )}
       <LedgerList entries={entries} month={month} storeStatus={storeStatus} />

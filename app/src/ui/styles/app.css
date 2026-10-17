@@ -422,6 +422,66 @@ h3 {
   flex-shrink: 0;
 }
 
+/*
+  予算の表（U3 BudgetTable、詳細モックアップの summary-over-budget・summary-budget-unset・
+  budget-validation-error・budget-copy-confirm・budget-copy-empty）。
+  予算欄は表の中で右揃えの数字。超過は --warn の文字（--paper との比は 4.5:1 を上回る）と太字で、
+  色だけでなく「超過」の文字でも伝える（BR2.2）。
+*/
+td.budget-cell {
+  vertical-align: top;
+}
+
+input.budget-input {
+  width: 9em;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.budget-unset {
+  display: block;
+  font-size: var(--text-sm);
+}
+
+td.budget-cell .field-error {
+  text-align: left;
+  white-space: normal;
+  max-width: 14em;
+  margin-left: auto;
+}
+
+.budget-hint {
+  margin: 0 0 var(--space-sm);
+}
+
+.over {
+  color: var(--warn);
+  font-weight: 700;
+}
+
+.confirm {
+  border: 2px solid var(--ink-2);
+  border-radius: var(--radius);
+  padding: var(--space-md);
+  margin-top: var(--space-md);
+  background: var(--paper-2);
+}
+
+.confirm h3 {
+  margin: 0 0 var(--space-xs);
+}
+
+.confirm p {
+  margin: 0 0 var(--space-xs);
+}
+
+.confirm .actions {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  margin-top: var(--space-md);
+}
+
 /* 768〜1023px では2列の部分（日付と金額、収入・支出・差額）を1列にする（NFR6.2）。 */
 @media (max-width: 1023px) {
   .grid-2,

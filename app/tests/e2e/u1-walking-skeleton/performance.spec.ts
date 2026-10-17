@@ -69,7 +69,8 @@ test.describe('U1 薄い版: 性能（3,000 件・1か月 100 件）', () => {
     const durations: number[] = [];
     for (let run = 0; run < 3; run += 1) {
       await page.getByLabel('金額（円）').fill(String(1000 + run));
-      await page.getByLabel('カテゴリ').selectOption('日用品');
+      // U3 の予算の表の名前と区別するため、名前の完全一致で選ぶ（計測の内容は変えない）。
+      await page.getByLabel('カテゴリ', { exact: true }).selectOption('日用品');
       // U2 の二重送信の防止（BR1.7）で、登録のあと 300 ミリ秒は押せない。押せるようになってから測る（計測の内容は変えない）。
       await expect(page.getByRole('button', { name: '登録する' })).toBeEnabled();
       durations.push(

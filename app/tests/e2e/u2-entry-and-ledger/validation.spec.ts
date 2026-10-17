@@ -44,7 +44,8 @@ test.describe('U2: 入力の誤りの表示（AC1.2.1〜AC1.2.5）', () => {
 
     await page.getByLabel('日付').fill('');
     await page.getByLabel('金額（円）').fill('1280');
-    await page.getByLabel('カテゴリ').selectOption('食費');
+    // U3 の予算の表の名前と区別するため、名前の完全一致で選ぶ（確かめる内容は変えない）。
+    await page.getByLabel('カテゴリ', { exact: true }).selectOption('食費');
     await submitButton(page).click();
     await expect(page.getByTestId('entry-form-alert')).toHaveText('入力を確かめてください: 日付');
     await expect(page.getByTestId('entry-date-error')).toHaveText('日付を入力してください');

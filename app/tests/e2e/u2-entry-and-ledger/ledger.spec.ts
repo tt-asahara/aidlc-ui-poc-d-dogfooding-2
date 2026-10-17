@@ -78,7 +78,8 @@ test.describe('U2: 一覧の性能（3,000 件・1か月 100 件）', () => {
     const durations: number[] = [];
     for (let run = 0; run < 3; run += 1) {
       await page.getByLabel('金額（円）').fill(String(1000 + run));
-      await page.getByLabel('カテゴリ').selectOption('日用品');
+      // U3 の予算の表の名前と区別するため、名前の完全一致で選ぶ（計測の内容は変えない）。
+      await page.getByLabel('カテゴリ', { exact: true }).selectOption('日用品');
       // 二重送信の防止（BR1.7）の 300 ミリ秒が過ぎ、押せる状態になってから測る。
       await expect(submitButton(page)).toBeEnabled();
       durations.push(

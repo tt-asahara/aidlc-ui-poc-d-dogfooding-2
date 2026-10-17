@@ -64,6 +64,7 @@ function AppShellContent({ services }: AppShellProps) {
     selectedMonth: boot.initialMonth,
     storeStatus: boot.storeStatus,
     lastExternalChangeAt: null,
+    externalChangeSeq: 0,
     storageAvailable: boot.storageAvailable,
   }));
   const [dataVersion, setDataVersion] = useState(0);
@@ -79,7 +80,12 @@ function AppShellContent({ services }: AppShellProps) {
       }
       if (event.type === 'externalChange') {
         const changedAt = services.now().toISOString();
-        setAppState((state) => ({ ...state, lastExternalChangeAt: changedAt }));
+        // 知らせごとに番号を1増やす（U3 NFR 設計 R-06・R-07。予算欄の作り直しの合図）。
+        setAppState((state) => ({
+          ...state,
+          lastExternalChangeAt: changedAt,
+          externalChangeSeq: state.externalChangeSeq + 1,
+        }));
         setOtherTabNotice(true);
       } else {
         setOtherTabNotice(false);
@@ -162,6 +168,8 @@ function AppShellContent({ services }: AppShellProps) {
             storeStatus={appState.storeStatus}
             dataVersion={dataVersion}
             onSelectMonth={selectMonth}
+            budget={services.budget}
+            externalChangeSeq={appState.externalChangeSeq}
           />
         </SectionBoundary>
         <SectionBoundary label="3 書き出し" testId="export-section-error">

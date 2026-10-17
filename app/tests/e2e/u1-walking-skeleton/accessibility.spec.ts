@@ -84,7 +84,8 @@ test.describe('U1 薄い版: アクセシビリティ', () => {
     await tabUntil(page, tabKey, amount);
     await page.keyboard.type('1280');
 
-    const category = page.getByLabel('カテゴリ');
+    // U3 の予算の表の名前と区別するため、名前の完全一致で選ぶ（確かめる内容は変えない）。
+    const category = page.getByLabel('カテゴリ', { exact: true });
     await tabUntil(page, tabKey, category);
     await page.keyboard.press('ArrowDown');
     if (process.platform === 'darwin') {
@@ -110,7 +111,8 @@ test.describe('U1 薄い版: アクセシビリティ', () => {
     );
     await expect(page.getByTestId('review-expense')).toHaveText('¥1,280');
 
-    await tabUntil(page, tabKey, page.getByRole('button', { name: '前の月' }), 20);
+    // U3 で「前の月の予算をコピー」が加わったため、名前の完全一致で選ぶ（確かめる内容は変えない）。
+    await tabUntil(page, tabKey, page.getByRole('button', { name: '前の月', exact: true }), 20);
     await page.keyboard.press('Enter');
     await expect(page.getByTestId('review-month-label')).toHaveText('2026年9月');
     await page.keyboard.press(tabKey);

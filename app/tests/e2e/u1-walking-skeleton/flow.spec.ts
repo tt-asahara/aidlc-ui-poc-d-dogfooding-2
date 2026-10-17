@@ -58,7 +58,8 @@ test.describe('U1 薄い版: 登録 → 集計 → CSV 出力 → 再読み込�
     page,
   }) => {
     await openApp(page);
-    const category = page.getByLabel('カテゴリ');
+    // U3 の予算の表の名前と区別するため、名前の完全一致で選ぶ（確かめる内容は変えない）。
+    const category = page.getByLabel('カテゴリ', { exact: true });
     await category.selectOption('食費');
 
     await page.getByRole('radio', { name: '収入' }).check();
@@ -82,11 +83,13 @@ test.describe('U1 薄い版: 登録 → 集計 → CSV 出力 → 再読み込�
     await expect(label).toHaveText('2026年10月');
     await expect(label).toHaveAttribute('aria-live', 'polite');
 
+    // U3 で「前の月の予算をコピー」が加わったため、名前の完全一致で選ぶ（確かめる内容は変えない）。
+    const previous = page.getByRole('button', { name: '前の月', exact: true });
     for (let step = 0; step < 9; step += 1) {
-      await page.getByRole('button', { name: '前の月' }).click();
+      await previous.click();
     }
     await expect(label).toHaveText('2026年1月');
-    await page.getByRole('button', { name: '前の月' }).click();
+    await previous.click();
     await expect(label).toHaveText('2025年12月');
     await page.getByRole('button', { name: '次の月' }).click();
     await expect(label).toHaveText('2026年1月');

@@ -23,7 +23,8 @@ test.describe('U2: 二重送信の防止（AC1.1.4、BR1.7）', () => {
   }) => {
     await openApp(page);
     await page.getByLabel('金額（円）').fill('1280');
-    await page.getByLabel('カテゴリ').selectOption('食費');
+    // U3 の予算の表の名前と区別するため、名前の完全一致で選ぶ（確かめる内容は変えない）。
+    await page.getByLabel('カテゴリ', { exact: true }).selectOption('食費');
 
     await submitButton(page).dblclick();
 

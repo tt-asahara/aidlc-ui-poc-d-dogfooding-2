@@ -1,3 +1,4 @@
+import { createBudget, type Budget } from '../domain/budget';
 import { createCsvExchange, type CsvExchange, type CsvFile } from '../domain/csvExchange';
 import { createLedger, type Ledger } from '../domain/ledger';
 import {
@@ -26,6 +27,8 @@ export interface AppServices {
   readonly store: DataStore;
   readonly ledger: Ledger;
   readonly summary: MonthlySummary;
+  /** 月別予算（C4、U3）。予算の差し込み口（BudgetSource）にも、この getMonth を使う。 */
+  readonly budget: Budget;
   readonly csv: CsvExchange;
   readonly seeder: SampleSeeder;
   readonly download: DownloadFile;
@@ -39,11 +42,15 @@ export interface AppServicesOptions {
   readonly getStorage?: () => StorageLike;
   readonly now?: () => Date;
   readonly download?: DownloadFile;
+  /** 予算の差し込み口の差し替え（テスト用）。省略すると Budget.getMonth（U3）。 */
   readonly budgetSource?: BudgetSource;
   readonly createSeeder?: (store: DataStore, ledger: Ledger) => SampleSeeder;
 }
 
-/** U1 の予算の取り出し: いつも空の一覧を返す（すべて「未設定」になる）。U3 が差し替える。 */
+/**
+ * U1 の予算の取り出し: いつも空の一覧を返す（すべて「未設定」になる）。
+ * U3 で組み立ての既定を Budget.getMonth に差し替えた。予算なしで確かめたいテストのために残す。
+ */
 export function createEmptyBudgetSource(): BudgetSource {
   return { getMonth: () => [] };
 }
@@ -91,9 +98,12 @@ export function createAppServices(options: AppServicesOptions = {}): AppServices
     now,
   });
   const ledger = createLedger({ store });
+  const budget = createBudget({ store });
+  // 予算の差し込み口を Budget.getMonth に差し替える（U3。組み立ての1か所。U1 の Q1）。
+  // createBrowserAppServices もこの関数を通るため、両方の組み立てで本物の予算になる。
   const summary = createMonthlySummary({
     ledger,
-    budgetSource: options.budgetSource ?? createEmptyBudgetSource(),
+    budgetSource: options.budgetSource ?? { getMonth: (month) => budget.getMonth(month) },
   });
   const csv = createCsvExchange({ ledger });
   const seeder = options.createSeeder
@@ -103,6 +113,7 @@ export function createAppServices(options: AppServicesOptions = {}): AppServices
     store,
     ledger,
     summary,
+    budget,
     csv,
     seeder,
     download: options.download ?? downloadFile,

@@ -90,7 +90,8 @@ export async function register(page: Page, input: EntryFormInput): Promise<void>
     await page.getByLabel('日付').fill(input.date);
   }
   await page.getByLabel('金額（円）').fill(input.amount);
-  await page.getByLabel('カテゴリ').selectOption(input.category);
+  // U3 で予算の表（名前「支出カテゴリ別の予算と実績」）が加わったため、名前の完全一致で選ぶ（操作は変えない）。
+  await page.getByLabel('カテゴリ', { exact: true }).selectOption(input.category);
   await page.getByLabel('メモ（任意）').fill(input.memo ?? '');
   await page.getByRole('button', { name: '登録する' }).click();
 }

@@ -1,0 +1,29 @@
+{
+  "stage": "infrastructure-design",
+  "unit": "u3-budget",
+  "upstream_ids": [
+    "NFR1.1", "NFR1.2",
+    "NFR2.1", "NFR2.2", "NFR2.3",
+    "NFR3.1",
+    "NFR4.1",
+    "NFR5.1", "NFR5.2", "NFR5.3", "NFR5.4",
+    "NFR6.1",
+    "NFR7.1", "NFR7.2"
+  ],
+  "coverage": [
+    { "id": "NFR1.1", "status": "OK", "target": "monitoring-design.md: 予算の保存の計測、cicd-pipeline.md の予算の保存のテスト" },
+    { "id": "NFR1.2", "status": "OK", "target": "monitoring-design.md: コピーの計測" },
+    { "id": "NFR2.1", "status": "N/A", "target": "画面部品の実装で決まり、構成は要らない" },
+    { "id": "NFR2.2", "status": "N/A", "target": "画面部品の実装で決まり、構成は要らない" },
+    { "id": "NFR2.3", "status": "OK", "target": "cicd-pipeline.md: 5つの状態の axe" },
+    { "id": "NFR3.1", "status": "OK", "target": "infrastructure-specification.md: 127.0.0.1 だけ、外への通信なし" },
+    { "id": "NFR4.1", "status": "N/A", "target": "Budget の実装で決まり、構成は要らない" },
+    { "id": "NFR5.1", "status": "OK", "target": "infrastructure-specification.md: 予算は budgetsToReplace の1回の書き込み、monitoring-design.md の計測" },
+    { "id": "NFR5.2", "status": "OK", "target": "monitoring-design.md: 保存の失敗で失われた入力 0 件の SLO" },
+    { "id": "NFR5.3", "status": "N/A", "target": "Budget と validateSnapshot の実装で決まり、構成は要らない" },
+    { "id": "NFR5.4", "status": "OK", "target": "cicd-pipeline.md: 再読み込みで予算が残るテスト" },
+    { "id": "NFR6.1", "status": "OK", "target": "cicd-pipeline.md: 手元の確認コマンドで3ブラウザ" },
+    { "id": "NFR7.1", "status": "OK", "target": "cicd-pipeline.md: GitHub Actions の単体テストとカバレッジ 80%" },
+    { "id": "NFR7.2", "status": "OK", "target": "cicd-pipeline.md: 承認済みの確認コマンドで既存のテストも通す" }
+  ]
+}
